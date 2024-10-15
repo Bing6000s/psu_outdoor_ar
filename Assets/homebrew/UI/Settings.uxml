@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/homebrew/UI/ButtonV1.uss?fileID=7433441132597879392&amp;guid=0ff943fa03e2d1045acab9a01b0b6904&amp;type=3#ButtonV1" />
+    <ui:VisualElement name="MainParent" style="width: 100%; height: 100%; align-items: center; justify-content: center; flex-direction: column; background-color: rgb(0, 120, 191);">
+        <ui:Label text="Settings" display-tooltip-when-elided="true" name="Label" style="font-size: 39%; -unity-font-style: bold; align-items: center; justify-content: center; -unity-text-align: upper-center; margin-bottom: 3%; color: rgb(255, 255, 255); margin-top: 3%;" />
+        <ui:VisualElement name="ControlParent" style="height: 60%; width: 100%; justify-content: center; align-items: center; flex-direction: row; transform-origin: center; flex-wrap: nowrap; flex-grow: 1; margin-left: 0; margin-bottom: 0; -unity-text-outline-color: rgba(0, 0, 0, 0);">
+            <ui:VisualElement style="background-image: none; -unity-background-image-tint-color: rgb(255, 255, 255); max-width: 100%; max-height: 100%; min-width: 50%; min-height: 80%; color: rgb(255, 255, 255);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ControlParent" style="height: 15%; width: 100%; justify-content: flex-start; align-items: flex-end; flex-direction: row; transform-origin: center; flex-wrap: nowrap; flex-grow: 1; margin-left: 3%; margin-bottom: 3%;">
+            <ui:Button text="BACK" display-tooltip-when-elided="true" name="back-button" class="wide-button button" style="height: 52%; max-width: none; max-height: none; min-height: auto; margin-left: 2%; min-width: auto; position: relative; font-size: 25%; width: 15%;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Sample" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/tripp_ui_import/SampleImages/SampleImage2.jpg?fileID=2800000&amp;guid=2797ea31a92a9fa4cacd43adda76ab9b&amp;type=3#SampleImage2&apos;); visibility: hidden;" />
+    <ui:VisualElement name="Target" style="flex-grow: 1; position: absolute; width: 100px; height: 100px;">
+        <ui:VisualElement />
+        <ui:VisualElement />
+        <ui:VisualElement />
+        <ui:VisualElement />
+    </ui:VisualElement>
+</ui:UXML>

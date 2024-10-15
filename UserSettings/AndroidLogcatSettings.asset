@@ -1,0 +1,205 @@
+{
+    "m_SelectedDeviceId": "R52W805K7XW",
+    "m_SelectedPackage": {
+        "deviceId": "R52W805K7XW",
+        "name": "com.rerc.psuedo",
+        "processId": 14608,
+        "exited": false
+    },
+    "m_SelectedPriority": 0,
+    "m_KnownPackagesForSerialization": [
+        {
+            "deviceId": "R5CT807N4EJ",
+            "name": "com.rerc.psuedo",
+            "processId": 26872,
+            "exited": false
+        },
+        {
+            "deviceId": "R5CT807N4EJ",
+            "name": "com.rerc.psuedo",
+            "processId": 29086,
+            "exited": false
+        },
+        {
+            "deviceId": "R5CT807N4EJ",
+            "name": "com.rerc.psuedo",
+            "processId": 30501,
+            "exited": false
+        },
+        {
+            "deviceId": "R5CT807N4EJ",
+            "name": "com.rerc.psuedo",
+            "processId": 32425,
+            "exited": false
+        },
+        {
+            "deviceId": "R5CT807N4EJ",
+            "name": "com.rerc.psuedo",
+            "processId": 4247,
+            "exited": false
+        },
+        {
+            "deviceId": "R5CT807N4EJ",
+            "name": "com.rerc.psuedo",
+            "processId": 7247,
+            "exited": false
+        },
+        {
+            "deviceId": "R5CT807N4EJ",
+            "name": "com.rerc.psuedo",
+            "processId": 8363,
+            "exited": false
+        },
+        {
+            "deviceId": "R5CT807N4EJ",
+            "name": "com.rerc.psuedo",
+            "processId": 5676,
+            "exited": false
+        },
+        {
+            "deviceId": "R5CT807N4EJ",
+            "name": "com.rerc.psuedo",
+            "processId": 7683,
+            "exited": false
+        },
+        {
+            "deviceId": "R5CT807N4EJ",
+            "name": "com.rerc.psuedo",
+            "processId": 9727,
+            "exited": false
+        },
+        {
+            "deviceId": "R5CT807N4EJ",
+            "name": "com.rerc.psuedo",
+            "processId": 12999,
+            "exited": false
+        },
+        {
+            "deviceId": "R52W805K7XW",
+            "name": "com.rerc.psuedo",
+            "processId": 17900,
+            "exited": true
+        },
+        {
+            "deviceId": "R52W805K7XW",
+            "name": "com.rerc.psuedo",
+            "processId": 18951,
+            "exited": true
+        },
+        {
+            "deviceId": "R52W805K7XW",
+            "name": "com.rerc.psuedo",
+            "processId": 21565,
+            "exited": true
+        },
+        {
+            "deviceId": "R52W805K7XW",
+            "name": "com.rerc.psuedo",
+            "processId": 22482,
+            "exited": true
+        },
+        {
+            "deviceId": "R52W805K7XW",
+            "name": "com.sec.android.app.launcher",
+            "processId": 3759,
+            "exited": false
+        },
+        {
+            "deviceId": "R52W805K7XW",
+            "name": "com.rerc.psuedo",
+            "processId": 3555,
+            "exited": false
+        },
+        {
+            "deviceId": "R52W805K7XW",
+            "name": "com.rerc.psuedo",
+            "processId": 4942,
+            "exited": false
+        },
+        {
+            "deviceId": "R52W805K7XW",
+            "name": "com.rerc.psuedo",
+            "processId": 8005,
+            "exited": false
+        },
+        {
+            "deviceId": "R52W805K7XW",
+            "name": "com.rerc.psuedo",
+            "processId": 9847,
+            "exited": false
+        },
+        {
+            "deviceId": "R52W805K7XW",
+            "name": "com.rerc.psuedo",
+            "processId": 14608,
+            "exited": false
+        }
+    ],
+    "m_Tags": {
+        "m_Entries": [
+            {
+                "m_Name": "Filter by all listed tags",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "No Filter",
+                "m_Selected": true
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Tag Control...",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Unity",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "CRASH",
+                "m_Selected": false
+            }
+        ]
+    },
+    "m_MemoryViewerState": {
+        "MemoryWindowHeight": 300.0,
+        "MemoryWindowWidth": 170.0,
+        "MemoryTypeEnabled": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
+        "MemoryGroup": 2,
+        "Behavior": 0
+    },
+    "m_FilterOptions": {
+        "m_Filter": "",
+        "m_UseRegularExpressions": false,
+        "m_MatchCase": false
+    },
+    "m_SymbolPaths": [],
+    "m_CaptureVideoSettings": {
+        "TimeLimitEnabled": false,
+        "TimeLimit": 180,
+        "VideoSizeEnabled": false,
+        "VideoSizeX": 1280,
+        "VideoSizeY": 720,
+        "BitRateEnabled": false,
+        "BitRateK": 20000,
+        "DisplayIdEnabled": false,
+        "DisplayId": ""
+    }
+}

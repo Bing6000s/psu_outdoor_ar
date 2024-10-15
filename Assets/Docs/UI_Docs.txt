@@ -1,0 +1,14 @@
+# UI Information
+@Tripp-Sautner
+March 1st, 2023
+
+## The UI is currently based on the Unity UI Toolkit
+https://docs.unity3d.com/Manual/UIToolkits.html
+https://docs.unity3d.com/Manual/UIElements.html
+https://resources.unity.com/games/user-interface-design-and-implementation-in-unity?ungated=true
+Unity is in a transitional period between two diffrent UI systems, since UI Toolkit is the new UI system this is what this system is based on.
+
+## If you enjoy CSS this will be a joy
+Once you open the UI Toolkit window via """Window > UI Toolkit > UI Builder""" you will see a window that lets you begin work on the custom UI Design.
+
+CSS is a nightmare on mobile devices so to counteract this painpoint we push the UI in a static 16:9 aspect ratio.
