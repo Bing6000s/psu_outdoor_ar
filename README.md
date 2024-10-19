@@ -1,3 +1,7 @@
+## DevLog
+# 10/18
+Talked to Amaan about GPSManager. Started work on NavArrow and AR system relation system. Created sphere to represent points in "AR Unity Space". Convert camera to AR camera with AR session.
+
 # AugmentedReality_RERC
 The nickname "Psuedo" came from the use of psuedo-AR with the bounding boxes, not true AR but almost there. The videos located in "_Videos" will provide you with a lot of detail on where, what, and how things work.
 
