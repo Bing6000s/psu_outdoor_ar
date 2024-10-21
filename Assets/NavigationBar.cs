@@ -10,7 +10,7 @@ public class NavigationBar : MonoBehaviour
 {
     public TMP_InputField inputfield;
     private string baseUrl = "https://atlas.microsoft.com/route/directions/json?api-version=1.0";
-    private string apiKey = "28wliaKNAA7BkAk9JsOalLkkR81nyYHK9vgSd7Fd7zaPnLL7zjDVJQQJ99AIACYeBjFL5h9IAAAgAZMPD6O2"; // Replace with your actual API key
+    private string apiKey = "API_KEY"; // Replace with your actual API key
 
     void Update()
     {
@@ -26,8 +26,10 @@ public class NavigationBar : MonoBehaviour
     IEnumerator TestDirectionsAPI(string destination_query, bool testing)
     {
         // Coordinates to test the API with (starting and destination)
-        string StartingLocation = "40.812516,-77.891185";
-        string DestinationLocation = "40.80013,-77.86359";
+        // 300 W College Ave
+        string StartingLocation = "40.792460,-77.864042";
+        // Penn State HUB
+        string DestinationLocation = "40.798402,-77.861852";
 
         if (testing)
         {
