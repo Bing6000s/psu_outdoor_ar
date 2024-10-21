@@ -4,7 +4,6 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using TMPro;
 using System.Threading.Tasks;
-using System;
 
 public class NavigationBar : MonoBehaviour
 {
@@ -26,7 +25,8 @@ public class NavigationBar : MonoBehaviour
     IEnumerator TestDirectionsAPI(string destination_query, bool testing)
     {
         // Coordinates to test the API with (starting and destination)
-        string StartingLocation = "40.812516,-77.891185";
+	string StartingLocation = "40.812516,-77.891185";
+	//string startingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
         string DestinationLocation = "40.80013,-77.86359";
 
         if (testing)
