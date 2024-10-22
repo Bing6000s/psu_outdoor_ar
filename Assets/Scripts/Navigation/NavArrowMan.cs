@@ -8,7 +8,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
     int markerCount = 0;
     [SerializeField] GameObject objToSpawn;             // prefab of the marker triangle
     [SerializeField] GameObject obstacleMarker;         // prefab of the obstacle marker triangle
-    [SerializeField] GameObject player;                 // reference to player
+    //[SerializeField] GameObject player;                 // reference to player
     [SerializeField] Canvas canvas;                     // reference to canvas
     [SerializeField] UnityEngine.UI.Image NavArrow;     // reference to NavArrow
 
@@ -20,9 +20,11 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
     float distanceToObstacle;
 
     Vector3 direction;
-    Vector3 playerVec;
+    Vector3 playerVec;      //Use GPs instead of player Position
     Vector3 targetVec;
     Vector3 obstacleVec;
+
+    GPS gps;                // reference to GPS script
 
     float adjustmentAngle;
     bool adjustingForObstacle;
@@ -37,6 +39,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         closest = Mathf.Infinity;
         closestObstacle = Mathf.Infinity;
 
+        gps = GPS.Instance;                         // Get the instance of the GPS script
         GatherAllMarkers();                         // Gather all existing markers at the start
     }
 
@@ -51,6 +54,9 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
             PlaceMarker();
             markerCount++;
         }*/
+
+        // Update player position using GPS coordinates
+        playerVec = GPSLocationToWorld(gps.latitude, gps.longitude);
 
         // Remove markers if player is close enough
         RemoveMarkersNearPlayer();
@@ -86,13 +92,27 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         targets.Add(Instantiate(objToSpawn, transform.position, Quaternion.Euler(180, 0, 0)) as GameObject);
     }
 
+     // Converts GPS latitude and longitude into Unity world position (simplified for a flat map)
+    Vector3 GPSLocationToWorld(float latitude, float longitude)
+    {
+        // Example conversion: scale latitude and longitude to Unity units
+        // Adjust scale factor as needed to fit the game world size
+        float scaleFactor = 1000f;  // You can tweak this based on world size
+
+        float x = longitude * scaleFactor;
+        float z = latitude * scaleFactor;
+
+        // Keep y (altitude) as 0 for now, or can use altitude data from the GPS script
+        return new Vector3(x, 0, z);
+    }
+
     void RemoveMarkersNearPlayer()
     {
         List<GameObject> markersToRemove = new List<GameObject>();
 
         foreach (GameObject target in targets)
         {
-            playerVec = player.transform.position;
+            // playerVec = player.transform.position;
             targetVec = target.transform.position;
             distance = Vector3.Distance(playerVec, targetVec);
 
@@ -142,7 +162,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         
         foreach (GameObject target in targets)
         {
-            playerVec = player.transform.position;
+            // playerVec = player.transform.position;
             targetVec = target.transform.position;
             distance = Vector3.Distance(playerVec, targetVec);
             
@@ -172,7 +192,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         {
             foreach (GameObject obstacle in obstacles)
             {
-                playerVec = player.transform.position;
+                // playerVec = player.transform.position;
                 obstacleVec = obstacle.transform.position;
                 distanceToObstacle = Vector3.Distance(playerVec, obstacleVec);
 
