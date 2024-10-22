@@ -4,7 +4,7 @@ public class DestinationSearchHandler : MonoBehaviour
 {
     // Reference to the InputField (Search Bar)
     public TMP_InputField inputField;
-    private string apiKey = "28wliaKNAA7BkAk9JsOalLkkR81nyYHK9vgSd7Fd7zaPnLL7zjDVJQQJ99AIACYeBjFL5h9IAAAgAZMPD6O2";
+    private string apiKey = "API_KEY";
     // Reference to the Text Area (Gray Box)
     public TMP_Text searchDisplay;
 

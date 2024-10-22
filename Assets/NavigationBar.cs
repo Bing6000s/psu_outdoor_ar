@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 public class NavigationBar : MonoBehaviour
 {
     public TMP_InputField inputfield;
+    public GameObject directionTextPrefab;
+    public GameObject distanceText;
+    public GameObject contentParent;
     private string baseUrl = "https://atlas.microsoft.com/route/directions/json?api-version=1.0";
     private string apiKey = "28wliaKNAA7BkAk9JsOalLkkR81nyYHK9vgSd7Fd7zaPnLL7zjDVJQQJ99AIACYeBjFL5h9IAAAgAZMPD6O2"; // Replace with your actual API key
 
@@ -25,9 +28,12 @@ public class NavigationBar : MonoBehaviour
     IEnumerator TestDirectionsAPI(string destination_query, bool testing)
     {
         // Coordinates to test the API with (starting and destination)
-	string StartingLocation = "40.812516,-77.891185";
-	//string startingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
-        string DestinationLocation = "40.80013,-77.86359";
+        // 300 W College Ave
+        string StartingLocation = "40.792460,-77.864042";
+        // Penn State HUB. Not in use rn
+        string DestinationLocation = "40.798402,-77.861852";
+	      // string startingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
+
 
         if (testing)
         {
@@ -64,7 +70,8 @@ public class NavigationBar : MonoBehaviour
         {
             // Send the request and wait for the response
             yield return webRequest.SendWebRequest();
-
+            int totalDistance = 0;
+            // Error occurs
             if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError("Search bar: Error: " + webRequest.error);
@@ -85,13 +92,14 @@ public class NavigationBar : MonoBehaviour
                 {
                     Route route = directionsResponse.Routes[0]; // First route
 
-                    // Access the legs of the route
+                    // Access the legs/length of the route
                     if (route.Legs != null && route.Legs.Length > 0)
                     {
                         foreach (var leg in route.Legs)
                         {
                             Debug.Log("Search bar result: Travel Time: " + leg.Summary.TravelTimeInSeconds + " seconds");
                             Debug.Log("Search bar result: Travel Length: " + leg.Summary.LengthInMeters + " meters");
+                            totalDistance += leg.Summary.LengthInMeters;
 
                             // Access the points (latitude and longitude) of each leg
                             if (leg.Points != null && leg.Points.Length > 0)
@@ -99,9 +107,16 @@ public class NavigationBar : MonoBehaviour
                                 Debug.Log("Search bar: Total travel in this trip:");
                                 foreach (var point in leg.Points)
                                 {
+
                                     Debug.Log($"Search bar: Location{leg}, Latitude = {point.Latitude}, Longitude = {point.Longitude}");
+                                    // Instantiate points inside Scroll view.
+                                    GameObject directionTextObject = Instantiate(directionTextPrefab, contentParent.transform);
+                                    TMP_Text directionText = directionTextObject.GetComponent<TMP_Text>();
+                                    directionText.text = $"{point.Latitude}, {point.Longitude}";
+
                                 }
                             }
+
                             else
                             {
                                 Debug.Log("Search bar: No points found for this leg.");
@@ -118,6 +133,9 @@ public class NavigationBar : MonoBehaviour
                     Debug.LogWarning("Search bar: No routes found in the response.");
                 }
             }
+            // Instantiate distance here.
+            TMP_Text distance = distanceText.GetComponent<TMP_Text>();
+            distance.text = $"Total Distance: {totalDistance}m";
         }
     }
 
