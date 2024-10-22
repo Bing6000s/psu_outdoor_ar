@@ -4,7 +4,6 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using TMPro;
 using System.Threading.Tasks;
-using System;
 
 public class NavigationBar : MonoBehaviour
 {
@@ -33,6 +32,8 @@ public class NavigationBar : MonoBehaviour
         string StartingLocation = "40.792460,-77.864042";
         // Penn State HUB. Not in use rn
         string DestinationLocation = "40.798402,-77.861852";
+	      // string startingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
+
 
         if (testing)
         {
