@@ -37,10 +37,13 @@ public class NavigationBar : MonoBehaviour
     // Coroutine to handle the geolocation asynchronously and start the directions API request
     IEnumerator TestDirectionsAPI(string destination_query)
     {
-        // Coordinates to test the API with (starting and destination)
-        // 300 W College Ave
-        string StartingLocation = "40.792460,-77.864042";
-        //string StartingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
+
+        string StartingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
+
+        if (StartingLocation == "0,0")
+        {
+            StartingLocation = "40.810987,-77.892420";
+        }
         string DestinationLocation = "40.798402,-77.861852";
 
         // Call async function and wait for the result
