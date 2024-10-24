@@ -20,46 +20,49 @@ public class NavigationBar : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return))
         {
             string userInput = inputfield.text;
-            StartCoroutine(TestDirectionsAPI(userInput, true));
+            StartCoroutine(TestDirectionsAPI(userInput));
+            inputfield.text = "";
         }
     }
 
     // Coroutine to handle the geolocation asynchronously and start the directions API request
-    IEnumerator TestDirectionsAPI(string destination_query, bool testing)
+    IEnumerator TestDirectionsAPI(string destination_query)
     {
-        // Coordinates to test the API with (starting and destination)
-        // 300 W College Ave
-        string StartingLocation = "40.792460,-77.864042";
-        // Penn State HUB. Not in use rn
-        string DestinationLocation = "40.798402,-77.861852";
-	      // string startingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
-
-
-        if (testing)
-        {
-            // Call async function and wait for the result
-            Task<string> geoTask = GetGeolocationAsString(destination_query);
-            yield return new WaitUntil(() => geoTask.IsCompleted);
-
-            // Get the result from the async task
-            string geoResult = geoTask.Result;
-
-            // Parse the result to extract latitude and longitude
-            if (!string.IsNullOrEmpty(geoResult))
-            {
-                Debug.Log("Search bar: Geolocation Result: " + geoResult);
-                // Assuming the result is in format "Latitude: xx.xxxx, Longitude: yy.yyyy"
-                // You would need to extract the coordinates from the geoResult string
-                string[] geoParts = geoResult.Replace("Latitude: ", "").Replace("Longitude: ", "").Split(',');
-                DestinationLocation = $"{geoParts[0].Trim()},{geoParts[1].Trim()}";
-                Debug.Log("Search bar: Destination geocordinates: " + DestinationLocation);
-            }
-            else
-            {
-                Debug.LogError("Search bar: Geolocation not found");
-                yield break; // Stop further execution if geolocation fails
-            }
+        // Destroy coordinates in scroll view incase user searches again
+        foreach (Transform child in contentParent.transform) {
+            Destroy(child.gameObject);
         }
+        // Variables to initialize the API with (starting and destination)
+        string StartingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
+        string DestinationLocation;
+        // Byrn Apartments
+        if (StartingLocation == "0,0") {
+            StartingLocation = "40.810987,-77.892420";
+        }
+
+        // Call async function and wait for the result
+        Task<string> geoTask = GetGeolocationAsString(destination_query);
+        yield return new WaitUntil(() => geoTask.IsCompleted);
+
+        // Get the result from the async task
+        string geoResult = geoTask.Result;
+
+        // Parse the result to extract latitude and longitude
+        if (!string.IsNullOrEmpty(geoResult))
+        {
+            Debug.Log("Search bar: Geolocation Result: " + geoResult);
+            // Assuming the result is in format "Latitude: xx.xxxx, Longitude: yy.yyyy"
+            // You would need to extract the coordinates from the geoResult string
+            string[] geoParts = geoResult.Replace("Latitude: ", "").Replace("Longitude: ", "").Split(',');
+            DestinationLocation = $"{geoParts[0].Trim()},{geoParts[1].Trim()}";
+            Debug.Log("Search bar: Destination geocordinates: " + DestinationLocation);
+        }
+        else
+        {
+            Debug.LogError("Search bar: Geolocation not found");
+            yield break; // Stop further execution if geolocation fails
+        }
+    
 
         // Construct the full URL for the request
         string url = $"{baseUrl}&query={StartingLocation}:{DestinationLocation}&subscription-key={apiKey}&travelMode=pedestrian";
@@ -71,6 +74,7 @@ public class NavigationBar : MonoBehaviour
             // Send the request and wait for the response
             yield return webRequest.SendWebRequest();
             int totalDistance = 0;
+            int totalTravelTime = 0;
             // Error occurs
             if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
@@ -86,6 +90,8 @@ public class NavigationBar : MonoBehaviour
 
                 // Deserialize the JSON response
                 DirectionsResponse directionsResponse = JsonConvert.DeserializeObject<DirectionsResponse>(jsonResponse);
+                
+                
 
                 // Access and log route information, including points
                 if (directionsResponse != null && directionsResponse.Routes != null && directionsResponse.Routes.Length > 0)
@@ -99,8 +105,8 @@ public class NavigationBar : MonoBehaviour
                         {
                             Debug.Log("Search bar result: Travel Time: " + leg.Summary.TravelTimeInSeconds + " seconds");
                             Debug.Log("Search bar result: Travel Length: " + leg.Summary.LengthInMeters + " meters");
+                            totalTravelTime += leg.Summary.TravelTimeInSeconds;
                             totalDistance += leg.Summary.LengthInMeters;
-
                             // Access the points (latitude and longitude) of each leg
                             if (leg.Points != null && leg.Points.Length > 0)
                             {
@@ -134,8 +140,9 @@ public class NavigationBar : MonoBehaviour
                 }
             }
             // Instantiate distance here.
+            totalTravelTime = totalTravelTime/60 + 1;
             TMP_Text distance = distanceText.GetComponent<TMP_Text>();
-            distance.text = $"Total Distance: {totalDistance}m";
+            distance.text = $"{totalDistance} meters \n {totalTravelTime} minutes";
         }
     }
 
