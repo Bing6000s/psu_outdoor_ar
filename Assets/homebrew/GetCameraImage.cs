@@ -33,7 +33,7 @@ public class GetCameraImage : MonoBehaviour
         if (devices.Length > 0)
         {
             // 
-            webCamTexture.deviceName = devices[0].name;
+            webCamTexture.deviceName = devices[camNum].name;
             outputImage.material.mainTexture = webCamTexture;
             webCamTexture.Play();
         }

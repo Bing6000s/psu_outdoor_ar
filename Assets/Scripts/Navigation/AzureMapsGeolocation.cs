@@ -21,7 +21,7 @@ public class AzureMapsGeocodingExample
         double longitude = GPS.Instance.longitude == 0 ? -77.892420 : GPS.Instance.longitude;
 
         // Construct base URL
-        string url = $"https://atlas.microsoft.com/search/fuzzy/json?lat={latitude}&lon={longitude}";
+        string url = $"https://atlas.microsoft.com/search/fuzzy/json?lat={latitude}&lon={longitude}&radius=5000";
 
         using (HttpClient client = new HttpClient())
         {
