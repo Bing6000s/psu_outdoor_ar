@@ -19,6 +19,10 @@ public class UIController : MonoBehaviour
         myImagesButton = root.Q<Button>("my-images-button");
         settingsButton = root.Q<Button>("settings-button");
 
+        if (startButton == null) Debug.LogError("Start Button not found!");
+        if (myImagesButton == null) Debug.LogError("My Images Button not found!");
+        if (settingsButton == null) Debug.LogError("Settings Button not found!");
+
         startButton.clicked += StartButtonPressed;
         myImagesButton.clicked += MyImagesButtonPressed;
         settingsButton.clicked += SettingsButtonPressed;

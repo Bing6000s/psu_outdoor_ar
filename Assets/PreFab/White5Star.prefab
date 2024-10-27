@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 7083203784984305528}
   - component: {fileID: 3238525918251047846}
   m_Layer: 0
-  m_Name: ObstaclePoint
-  m_TagString: Obstacle
+  m_Name: White5Star
+  m_TagString: Mark
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 4284144728270918270}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1215, y: 387.0418, z: -906}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.2794, y: 0.2794, z: 0.2794}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7bd2b19f8bb2fc9498ffee2549188e33, type: 2}
+  - {fileID: 2100000, guid: 748a9a6ccfbec5a4fa07a2d45df5f958, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

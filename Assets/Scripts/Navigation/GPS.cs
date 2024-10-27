@@ -28,48 +28,57 @@ public class GPS : MonoBehaviour
 
     private IEnumerator GetStartLocationService()
     {
+        // Check if the user has location service enabled.
+        if (!Input.location.isEnabledByUser)
+        {
+            Debug.Log("Location not enabled on device or app does not have permission to access location");
+            yield break;
+        }
+
+        // Start the location service
+        Input.location.Start();
+
+        // Wait until the location service initializes
+        int maxWait = 20;
+        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
+        {
+            yield return new WaitForSeconds(waittime);
+            maxWait--;
+        }
+
+        // If the service didn't initialize in 20 seconds this cancels location service use.
+        if (maxWait <= 0)
+        {
+            Debug.Log("Timed out");
+            yield break;
+        }
+
+        // If the connection failed this cancels location service use.
+        if (Input.location.status == LocationServiceStatus.Failed)
+        {
+            Debug.LogError("Unable to determine device location");
+            yield break;
+        }
+
+        // Update GPS coordinates continuously
         while (true)
         {
-            // Check if the user has location service enabled.
-            if (!Input.location.isEnabledByUser)
+            if (Input.location.status == LocationServiceStatus.Running)
             {
-                Debug.Log("Location not enabled on device or app does not have permission to access location");
-                yield break;
-            }
-            
-            // Starts the location service.
-            Input.location.Start();
+                // Update latitude, longitude, and altitude
+                latitude = Input.location.lastData.latitude;
+                longitude = Input.location.lastData.longitude;
+                altitude = Input.location.lastData.altitude;
 
-            // Waits until the location service initializes
-            int maxWait = 20;
-            while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
+                Debug.Log($"Updated GPS Coordinates: Latitude: {latitude}, Longitude: {longitude}, Altitude: {altitude}");
+            }
+            else
             {
-                yield return new WaitForSeconds(waittime);
-                maxWait--;
+                Debug.LogError("Unable to update location");
             }
 
-            // If the service didn't initialize in 20 seconds this cancels location service use.
-            if (maxWait <= 0)
-            {
-                Debug.Log("Timed out");
-                yield break;
-            }
-
-            // If the connection failed this cancels location service use.
-            if (Input.location.status == LocationServiceStatus.Failed)
-            {
-                Debug.LogError("Unable to determine device location");
-                yield break;
-            }
-
-            // If the connection succeeded, this retrieves the device's current location and displays it 
-            latitude = Input.location.lastData.latitude;
-            longitude = Input.location.lastData.longitude;
-            altitude = Input.location.lastData.altitude;
-
-            Input.location.Stop();
-            
-            yield return new WaitForSeconds(waittime);
+            // Wait before the next update
+            yield return new WaitForSeconds(waittime);  // wait for the next update
         }
     }
 }
