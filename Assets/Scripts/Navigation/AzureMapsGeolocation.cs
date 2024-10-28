@@ -17,10 +17,16 @@ public class AzureMapsGeocodingExample
     // Method to get geolocation data from Azure Maps API
     public static async Task<GeolocationResult> GetGeolocation(string apiKey, string query)
     {
-        string url = $"https://atlas.microsoft.com/search/address/json";
+
+        double latitude = GPS.Instance.latitude == 0 ? 40.810987 : GPS.Instance.latitude;
+        double longitude = GPS.Instance.longitude == 0 ? -77.892420 : GPS.Instance.longitude;
+
+        // Construct base URL
+        string url = $"https://atlas.microsoft.com/search/fuzzy/json?lat={latitude}&lon={longitude}";
 
         using (HttpClient client = new HttpClient())
         {
+            // Build query parameters
             var queryParams = new Dictionary<string, string>
             {
                 { "api-version", "1.0" },
@@ -29,6 +35,7 @@ public class AzureMapsGeocodingExample
                 { "limit", "1" }
             };
 
+            // Add query parameters to the URL
             var uriBuilder = new UriBuilder(url)
             {
                 Query = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={Uri.EscapeDataString(kvp.Value)}"))
@@ -36,6 +43,7 @@ public class AzureMapsGeocodingExample
 
             try
             {
+                // Send the request and get the response
                 HttpResponseMessage response = await client.GetAsync(uriBuilder.Uri);
 
                 if (response.IsSuccessStatusCode)
