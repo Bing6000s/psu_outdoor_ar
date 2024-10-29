@@ -77,6 +77,7 @@ public class NavigationBar : MonoBehaviour
             yield return webRequest.SendWebRequest();
             int totalDistance = 0;
             int totalTravelTime = 0;
+            bool tooLongRoute = false;
             // Error occurs
             if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
@@ -91,7 +92,7 @@ public class NavigationBar : MonoBehaviour
                 Debug.Log("Search bar: API Response: " + jsonResponse);
                 // Deserialize the JSON response
                 DirectionsResponse directionsResponse = JsonConvert.DeserializeObject<DirectionsResponse>(jsonResponse);
-                bool tooLongRoute = false;
+                tooLongRoute = false;
 
 
                 // Access and log route information, including points
