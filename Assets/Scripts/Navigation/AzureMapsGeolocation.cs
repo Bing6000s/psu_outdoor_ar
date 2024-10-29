@@ -16,28 +16,19 @@ public class AzureMapsGeocodingExample
 
     public static async Task<GeolocationResult> GetGeolocation(string apiKey, string query)
     {
-        // Use actual GPS coordinates or fallback to default location (The Bryn Apartments)
-        double latitude = GPS.Instance.latitude == 0 ? 40.810987 : GPS.Instance.latitude;
-        double longitude = GPS.Instance.longitude == 0 ? -77.892420 : GPS.Instance.longitude;
+        // Define default coordinates if GPS coordinates are not set
+        double latitude = GPS.Instance.latitude != 0 ? GPS.Instance.latitude : 40.810987;
+        double longitude = GPS.Instance.longitude != 0 ? GPS.Instance.longitude : -77.893880;
 
-        // Construct base URL
-        string url = $"https://atlas.microsoft.com/search/fuzzy/json?lat={latitude}&lon={longitude}&radius=5000";
+        // Construct base URL with subscription key and coordinates
+        string url = $"https://atlas.microsoft.com/search/fuzzy/json?api-version=1.0&subscription-key={apiKey}&lat={latitude}&lon={longitude}&radius=1000";
 
         using (HttpClient client = new HttpClient())
         {
-            // Build query parameters
-            var queryParams = new Dictionary<string, string>
-            {
-                { "api-version", "1.0" },
-                { "subscription-key", apiKey },
-                { "query", query },
-                { "limit", "1" }
-            };
-
-            // Add query parameters to the URL
+            // Add the query parameter to the URL
             var uriBuilder = new UriBuilder(url)
             {
-                Query = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={Uri.EscapeDataString(kvp.Value)}"))
+                Query = $"query={Uri.EscapeDataString(query)}&limit=1"
             };
 
             try

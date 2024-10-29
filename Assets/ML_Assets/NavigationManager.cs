@@ -40,9 +40,9 @@ public class NavigationManager : MonoBehaviour
         {
             GameObject item = Instantiate(locationItemPrefab, locationsContainer);
             item.GetComponentInChildren<Text>().text = location;
-            
+
             Button button = item.GetComponent<Button>();
-            if(button != null)
+            if (button != null)
             {
                 button.onClick.AddListener(() => OnLocationSelected(location));
             }
@@ -67,7 +67,9 @@ public class NavigationManager : MonoBehaviour
 
         // Hide the navigation panel
         navigationPanel.SetActive(false);
-        
+
+
+        SceneManager.LoadScene("AR_Navigation");
         // Start the AR Session to display the camera feed
         arSession.enabled = true;
     }
@@ -81,7 +83,7 @@ public class NavigationManager : MonoBehaviour
 
     public void ReturnToObjectRecognition()
     {
-        arSession.enabled = false; 
+        arSession.enabled = false;
         SceneManager.LoadScene("AR_Navigation");
     }
 }
