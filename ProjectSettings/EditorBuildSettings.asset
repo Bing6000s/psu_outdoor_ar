@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 510ea69f117b1a948955367c8192b2af
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/AR_Navigation.unity
     guid: 340fad8bd8837c349860d1c5d9bf24df
   - enabled: 1
@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CurrentObjects.unity
     guid: 2abcd8a26b645e4499e510d1bf3271fb
+  - enabled: 1
+    path: Assets/Scenes/AR_Navigation.unity
+    guid: 3fc8acdd13e6c734bafef6554d6fdbcd
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 3a7e447cfbefec14cbdad8182b6783bb, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 85361aebdf50c1d4bbd2303cbdaa5afd, type: 2}
