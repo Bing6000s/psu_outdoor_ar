@@ -187,13 +187,8 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-<<<<<<< HEAD
       "version": "1.5.1",
       "depth": 0,
-=======
-      "version": "1.5.0",
-      "depth": 1,
->>>>>>> 4e7f91bb7aec1a6432c7b9d8c980e1214aa587b2
       "source": "registry",
       "dependencies": {
         "com.unity.modules.uielements": "1.0.0"
@@ -306,11 +301,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.toolchain.win-x86_64-linux-x86_64": {
-<<<<<<< HEAD
       "version": "2.0.10",
-=======
-      "version": "2.0.9",
->>>>>>> 4e7f91bb7aec1a6432c7b9d8c980e1214aa587b2
       "depth": 0,
       "source": "registry",
       "dependencies": {

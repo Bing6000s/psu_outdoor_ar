@@ -76,8 +76,4 @@ public class FileDataHandler
             
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 4e7f91bb7aec1a6432c7b9d8c980e1214aa587b2
