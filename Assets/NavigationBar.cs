@@ -14,12 +14,24 @@ public class NavigationBar : MonoBehaviour
     private string baseUrl = "https://atlas.microsoft.com/route/directions/json?api-version=1.0";
     private string apiKey = "28wliaKNAA7BkAk9JsOalLkkR81nyYHK9vgSd7Fd7zaPnLL7zjDVJQQJ99AIACYeBjFL5h9IAAAgAZMPD6O2"; // Replace with your actual API key
 
+    void Start()
+    {
+        inputfield.onEndEdit.AddListener(OnInputFieldSubmit);
+    }
     void Update()
     {
         // Start the API test when the scene starts
         if (Input.GetKeyDown(KeyCode.Return))
         {
             string userInput = inputfield.text;
+            StartCoroutine(TestDirectionsAPI(userInput, true));
+        }
+    }
+    void OnInputFieldSubmit(string userInput)
+    {
+        // Only start the API call if the user pressed "Enter" on Android
+        if (!string.IsNullOrEmpty(userInput))
+        {
             StartCoroutine(TestDirectionsAPI(userInput, true));
         }
     }
@@ -32,7 +44,7 @@ public class NavigationBar : MonoBehaviour
         string StartingLocation = "40.792460,-77.864042";
         // Penn State HUB. Not in use rn
         string DestinationLocation = "40.798402,-77.861852";
-	      // string startingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
+        // string startingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
 
 
         if (testing)
@@ -156,6 +168,10 @@ public class NavigationBar : MonoBehaviour
             Debug.LogError("Search bar: Failed to get geolocation for the entered address.");
             return null;
         }
+    }
+    private void OnDestroy()
+    {
+        inputfield.onEndEdit.RemoveListener(OnInputFieldSubmit);
     }
 
     // Direction response classes (unchanged)
