@@ -33,30 +33,14 @@ public class NavigationBar : MonoBehaviour
         // Only start the API call if the user pressed "Enter" on Android
         if (!string.IsNullOrEmpty(userInput))
         {
-            StartCoroutine(TestDirectionsAPI(userInput, true));
-        }
-    }
-    void OnInputFieldSubmit(string userInput)
-    {
-        // Only start the API call if the user pressed "Enter" on Android
-        if (!string.IsNullOrEmpty(userInput))
-        {
-            StartCoroutine(TestDirectionsAPI(userInput, true));
+            StartCoroutine(TestDirectionsAPI(userInput));
         }
     }
 
     // Coroutine to handle the geolocation asynchronously and start the directions API request
-    IEnumerator TestDirectionsAPI(string destination_query, bool testing)
+    IEnumerator TestDirectionsAPI(string destination_query)
     {
         // Coordinates to test the API with (starting and destination)
-        // 300 W College Ave
-        string StartingLocation = "40.792460,-77.864042";
-        // Penn State HUB. Not in use rn
-        string DestinationLocation = "40.798402,-77.861852";
-        // string startingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
-
-
-        if (testing)
         // Destroy coordinates in scroll view incase user searches again
         foreach (Transform child in contentParent.transform)
         {
@@ -106,6 +90,8 @@ public class NavigationBar : MonoBehaviour
             yield return webRequest.SendWebRequest();
             int totalDistance = 0;
             int totalTravelTime = 0;
+            bool tooLongRoute = false;
+            TMP_Text distance = distanceText.GetComponent<TMP_Text>();
             // Error occurs
             if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
@@ -120,7 +106,7 @@ public class NavigationBar : MonoBehaviour
                 Debug.Log("Search bar: API Response: " + jsonResponse);
                 // Deserialize the JSON response
                 DirectionsResponse directionsResponse = JsonConvert.DeserializeObject<DirectionsResponse>(jsonResponse);
-                bool tooLongRoute = false;
+
 
 
                 // Access and log route information, including points
@@ -141,6 +127,7 @@ public class NavigationBar : MonoBehaviour
                             {
                                 Debug.Log("Search bar: Distance exceeded 8000 meters, canceling search.");
                                 tooLongRoute = true;
+                                distance.text = $"Given destination is too far, search again";
                                 yield break;
                             }
                             // Access the points (latitude and longitude) of each leg
@@ -177,8 +164,8 @@ public class NavigationBar : MonoBehaviour
             }
             // Instantiate distance here.
             totalTravelTime = totalTravelTime / 60 + 1;
-            TMP_Text distance = distanceText.GetComponent<TMP_Text>();
-            if (tooLongRoute)
+            // TMP_Text distance = distanceText.GetComponent<TMP_Text>();
+            if (tooLongRoute == true)
             {
                 distance.text = $"Given destination is too far, search again";
             }
