@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.EventSystems;
 using Newtonsoft.Json;
 using TMPro;
 using System.Threading.Tasks;
@@ -21,12 +22,12 @@ public class NavigationBar : MonoBehaviour
     void Update()
     {
         // Start the API test when the scene starts
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            string userInput = inputfield.text;
-            StartCoroutine(TestDirectionsAPI(userInput));
-            inputfield.text = "";
-        }
+        // if (EventSystem.current.currentSelectedGameObject == inputfield.gameObject && Input.GetKeyDown(KeyCode.Return))
+        // {
+        //     string userInput = inputfield.text;
+        //     StartCoroutine(TestDirectionsAPI(userInput));
+        //     inputfield.text = "";
+        // }
     }
     void OnInputFieldSubmit(string userInput)
     {
@@ -34,6 +35,7 @@ public class NavigationBar : MonoBehaviour
         if (!string.IsNullOrEmpty(userInput))
         {
             StartCoroutine(TestDirectionsAPI(userInput));
+            inputfield.text = "";
         }
     }
 
