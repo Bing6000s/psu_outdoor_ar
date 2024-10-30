@@ -96,6 +96,7 @@ public class LocationManager : MonoBehaviour
         viewLocationsText.text = string.Join("\n", storedLocations);
         viewLocationsPanel.SetActive(true);
         StartCoroutine(HideViewLocationPanelAfterDelay());
+
     }
 
     public void OnNavigationButtonClicked()

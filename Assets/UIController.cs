@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.XR.ARCore;
+using UnityEngine.XR.ARFoundation;
 public class UIController : MonoBehaviour
 {
     public Button startButton;
     public Button myImagesButton;
     public Button settingsButton;
 
+    public NavigationManager navigationManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +29,8 @@ public class UIController : MonoBehaviour
     void StartButtonPressed()
     {
         SceneManager.LoadScene("AR_Navigation");
+        //navigationManager.Start();
+        //navigationManager.arSession.enabled = true;
     }
 
     void MyImagesButtonPressed()
