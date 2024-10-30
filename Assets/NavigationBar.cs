@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.EventSystems;
 using Newtonsoft.Json;
 using TMPro;
 using System.Threading.Tasks;
@@ -27,10 +26,6 @@ public class NavigationBar : MonoBehaviour
         searchButton.onClick.AddListener(StartNav);
     }
 
-    void Start()
-    {
-        inputfield.onEndEdit.AddListener(OnInputFieldSubmit);
-    }
     void Update()
     {
         // Start the API test when the scene starts
@@ -42,20 +37,14 @@ public class NavigationBar : MonoBehaviour
     // Coroutine to handle the geolocation asynchronously and start the directions API request
     IEnumerator TestDirectionsAPI(string destination_query)
     {
-        // Coordinates to test the API with (starting and destination)
-        // Destroy coordinates in scroll view incase user searches again
-        foreach (Transform child in contentParent.transform)
-        {
-            Destroy(child.gameObject);
-        }
-        // Variables to initialize the API with (starting and destination)
+
         string StartingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
-        string DestinationLocation;
-        // Byrn Apartments
+
         if (StartingLocation == "0,0")
         {
             StartingLocation = "40.810987,-77.892420";
         }
+        string DestinationLocation = "40.798402,-77.861852";
 
         // Call async function and wait for the result
         Task<string> geoTask = GetGeolocationAsString(destination_query);
@@ -88,9 +77,6 @@ public class NavigationBar : MonoBehaviour
             // Send the request and wait for the response
             yield return webRequest.SendWebRequest();
             int totalDistance = 0;
-            int totalTravelTime = 0;
-            bool tooLongRoute = false;
-            TMP_Text distance = distanceText.GetComponent<TMP_Text>();
             // Error occurs
             if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
@@ -103,10 +89,9 @@ public class NavigationBar : MonoBehaviour
                 // Log the successful response
                 string jsonResponse = webRequest.downloadHandler.text;
                 Debug.Log("Search bar: API Response: " + jsonResponse);
+
                 // Deserialize the JSON response
                 DirectionsResponse directionsResponse = JsonConvert.DeserializeObject<DirectionsResponse>(jsonResponse);
-
-
 
                 // Access and log route information, including points
                 if (directionsResponse != null && directionsResponse.Routes != null && directionsResponse.Routes.Length > 0)
@@ -120,15 +105,8 @@ public class NavigationBar : MonoBehaviour
                         {
                             Debug.Log("Search bar result: Travel Time: " + leg.Summary.TravelTimeInSeconds + " seconds");
                             Debug.Log("Search bar result: Travel Length: " + leg.Summary.LengthInMeters + " meters");
-                            totalTravelTime += leg.Summary.TravelTimeInSeconds;
                             totalDistance += leg.Summary.LengthInMeters;
-                            if (totalDistance >= 8000)
-                            {
-                                Debug.Log("Search bar: Distance exceeded 8000 meters, canceling search.");
-                                tooLongRoute = true;
-                                distance.text = $"Given destination is too far, search again";
-                                yield break;
-                            }
+
                             // Access the points (latitude and longitude) of each leg
                             if (leg.Points != null && leg.Points.Length > 0)
                             {
@@ -162,16 +140,8 @@ public class NavigationBar : MonoBehaviour
                 }
             }
             // Instantiate distance here.
-            totalTravelTime = totalTravelTime / 60 + 1;
-            // TMP_Text distance = distanceText.GetComponent<TMP_Text>();
-            if (tooLongRoute == true)
-            {
-                distance.text = $"Given destination is too far, search again";
-            }
-            else
-            {
-                distance.text = $"{totalDistance} meters \n {totalTravelTime} minutes";
-            }
+            TMP_Text distance = distanceText.GetComponent<TMP_Text>();
+            distance.text = $"Total Distance: {totalDistance}m";
         }
     }
 
@@ -192,10 +162,6 @@ public class NavigationBar : MonoBehaviour
             Debug.LogError("Search bar: Failed to get geolocation for the entered address.");
             return null;
         }
-    }
-    private void OnDestroy()
-    {
-        inputfield.onEndEdit.RemoveListener(OnInputFieldSubmit);
     }
 
     // Direction response classes (unchanged)
