@@ -5,15 +5,27 @@ using UnityEngine.EventSystems;
 using Newtonsoft.Json;
 using TMPro;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
 public class NavigationBar : MonoBehaviour
 {
     public TMP_InputField inputfield;
+    public Button searchButton;
     public GameObject directionTextPrefab;
     public GameObject distanceText;
     public GameObject contentParent;
     private string baseUrl = "https://atlas.microsoft.com/route/directions/json?api-version=1.0";
     private string apiKey = "28wliaKNAA7BkAk9JsOalLkkR81nyYHK9vgSd7Fd7zaPnLL7zjDVJQQJ99AIACYeBjFL5h9IAAAgAZMPD6O2"; // Replace with your actual API key
+    public void StartNav()
+    {
+        string userInput = inputfield.text;
+        StartCoroutine(TestDirectionsAPI(userInput));
+    }
+
+    private void Start()
+    {
+        searchButton.onClick.AddListener(StartNav);
+    }
 
     void Start()
     {
@@ -22,23 +34,11 @@ public class NavigationBar : MonoBehaviour
     void Update()
     {
         // Start the API test when the scene starts
-        // if (EventSystem.current.currentSelectedGameObject == inputfield.gameObject && Input.GetKeyDown(KeyCode.Return))
-        // {
-        //     string userInput = inputfield.text;
-        //     StartCoroutine(TestDirectionsAPI(userInput));
-        //     inputfield.text = "";
-        // }
-    }
-    void OnInputFieldSubmit(string userInput)
-    {
-        // Only start the API call if the user pressed "Enter" on Android
-        if (!string.IsNullOrEmpty(userInput))
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            StartCoroutine(TestDirectionsAPI(userInput));
-            inputfield.text = "";
+            StartNav();
         }
     }
-
     // Coroutine to handle the geolocation asynchronously and start the directions API request
     IEnumerator TestDirectionsAPI(string destination_query)
     {
@@ -76,11 +76,8 @@ public class NavigationBar : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Search bar: Geolocation not found");
-            yield break; // Stop further execution if geolocation fails
+            inputfield.text = "Please enter your location";
         }
-
-
         // Construct the full URL for the request
         string url = $"{baseUrl}&query={StartingLocation}:{DestinationLocation}&subscription-key={apiKey}&travelMode=pedestrian";
         Debug.Log("Search bar: Request URL: " + url); // Log the URL to verify

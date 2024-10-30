@@ -3,42 +3,32 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq; // Add this for JSON handling
+using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 public class AzureMapsGeocodingExample
 {
-    // Class to store the geolocation results
     public class GeolocationResult
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
     }
 
-    // Method to get geolocation data from Azure Maps API
     public static async Task<GeolocationResult> GetGeolocation(string apiKey, string query)
     {
+        // Define default coordinates if GPS coordinates are not set
+        double latitude = GPS.Instance.latitude != 0 ? GPS.Instance.latitude : 40.810987;
+        double longitude = GPS.Instance.longitude != 0 ? GPS.Instance.longitude : -77.893880;
 
-        double latitude = GPS.Instance.latitude == 0 ? 40.810987 : GPS.Instance.latitude;
-        double longitude = GPS.Instance.longitude == 0 ? -77.892420 : GPS.Instance.longitude;
-
-        // Construct base URL
-        string url = $"https://atlas.microsoft.com/search/fuzzy/json?lat={latitude}&lon={longitude}";
+        // Construct base URL with subscription key and coordinates
+        string url = $"https://atlas.microsoft.com/search/fuzzy/json?api-version=1.0&subscription-key={apiKey}&lat={latitude}&lon={longitude}&radius=1000";
 
         using (HttpClient client = new HttpClient())
         {
-            // Build query parameters
-            var queryParams = new Dictionary<string, string>
-            {
-                { "api-version", "1.0" },
-                { "subscription-key", apiKey },
-                { "query", query },
-                { "limit", "1" }
-            };
-
-            // Add query parameters to the URL
+            // Add the query parameter to the URL
             var uriBuilder = new UriBuilder(url)
             {
-                Query = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={Uri.EscapeDataString(kvp.Value)}"))
+                Query = $"query={Uri.EscapeDataString(query)}&limit=1"
             };
 
             try
@@ -50,9 +40,9 @@ public class AzureMapsGeocodingExample
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
 
-                    // Parse the JSON response using Newtonsoft.Json
+                    // Parse the JSON response
                     JObject json = JObject.Parse(jsonResponse);
-                    
+
                     if (json["results"] != null && json["results"].HasValues)
                     {
                         var position = json["results"][0]["position"];
@@ -64,7 +54,8 @@ public class AzureMapsGeocodingExample
                     }
                     else
                     {
-                        return null; // No results found
+                        Console.WriteLine("No results found.");
+                        return null;
                     }
                 }
                 else

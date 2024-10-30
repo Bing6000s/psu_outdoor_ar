@@ -17,9 +17,9 @@ public class GetCameraImage : MonoBehaviour
     public MeshRenderer outputMesh;
     public Image outputImage;
 
-    public int camNum = 0;
-    public WebCamDevice[] devices;
-    public WebCamTexture webCamTexture;
+    private int camNum = 0;
+    private WebCamDevice[] devices;
+    private WebCamTexture webCamTexture;
 
     // Start is called before the first frame update
     void Start()
@@ -33,22 +33,26 @@ public class GetCameraImage : MonoBehaviour
         if (devices.Length > 0)
         {
             // 
-            webCamTexture.deviceName = devices[0].name;
+            webCamTexture.deviceName = devices[camNum].name;
             outputImage.material.mainTexture = webCamTexture;
             webCamTexture.Play();
-        } else {
+        }
+        else
+        {
             // Connect a camera screen
-            Debug.Log("No Camera Found");
         }
     }
 
-    public void cycleCamera() {
+    public void cycleCamera()
+    {
         Debug.Log("camNum: " + camNum);
         Debug.Log("devices.Length: " + devices.Length);
-        if (camNum +1 == devices.Length) 
-        {  
+        if (camNum + 1 == devices.Length)
+        {
             camNum = 0;
-        } else {
+        }
+        else
+        {
             camNum++;
         }
         webCamTexture.Stop();

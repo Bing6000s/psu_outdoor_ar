@@ -20,7 +20,7 @@ public class LocationManager : MonoBehaviour
     public Button clearLocationsButton;
     public Button navigationButton;
 
-    public List<string> storedLocations = new List<string>(); // Lists to store the coordinates
+    public List<string> storedLocations = new List<string>(); // List to store the coordinates
 
     private void Start()
     {
@@ -73,10 +73,22 @@ public class LocationManager : MonoBehaviour
         }
 
         string newLocation = locationName + ": Lat:" + GPS.Instance.latitude + ", Lon:" + GPS.Instance.longitude;
+
+        // Check if the location already exists in the list
+        if (storedLocations.Contains(newLocation))
+        {
+            Debug.LogError("This location has already been stored.");
+            return;
+        }
+
+        // Add location to the list
         storedLocations.Add(newLocation);
 
         // Save the location
         SaveStoredLocations();
+
+        // Disable the button for a short duration to prevent rapid presses
+        StartCoroutine(DisableButtonTemporarily(storeLocationButton));
     }
 
     public void OnViewLocationButtonClicked()
@@ -84,6 +96,7 @@ public class LocationManager : MonoBehaviour
         viewLocationsText.text = string.Join("\n", storedLocations);
         viewLocationsPanel.SetActive(true);
         StartCoroutine(HideViewLocationPanelAfterDelay());
+
     }
 
     public void OnNavigationButtonClicked()
@@ -95,7 +108,6 @@ public class LocationManager : MonoBehaviour
     {
         // Remove the specific key for stored locations
         PlayerPrefs.DeleteKey("storedLocations");
-        
         // Clear the list in memory
         storedLocations.Clear();
 
@@ -122,5 +134,12 @@ public class LocationManager : MonoBehaviour
         {
             storedLocations = new List<string>(savedLocations.Split(';'));
         }
+    }
+
+    private IEnumerator DisableButtonTemporarily(Button button)
+    {
+        button.interactable = false;
+        yield return new WaitForSeconds(0.5f); // Adjust the duration as needed
+        button.interactable = true;
     }
 }
