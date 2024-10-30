@@ -1,61 +1,56 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.EventSystems;
 using Newtonsoft.Json;
 using TMPro;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
 public class NavigationBar : MonoBehaviour
 {
     public TMP_InputField inputfield;
+    public Button searchButton;
     public GameObject directionTextPrefab;
     public GameObject distanceText;
     public GameObject contentParent;
     private string baseUrl = "https://atlas.microsoft.com/route/directions/json?api-version=1.0";
     private string apiKey = "28wliaKNAA7BkAk9JsOalLkkR81nyYHK9vgSd7Fd7zaPnLL7zjDVJQQJ99AIACYeBjFL5h9IAAAgAZMPD6O2"; // Replace with your actual API key
-
-    void Start()
+    public void StartNav()
     {
-        inputfield.onEndEdit.AddListener(OnInputFieldSubmit);
+        string userInput = inputfield.text;
+        StartCoroutine(TestDirectionsAPI(userInput));
+        inputfield.text = "";
     }
+
+    private void Start()
+    {
+        searchButton.onClick.AddListener(StartNav);
+    }
+
     void Update()
     {
         // Start the API test when the scene starts
-        // if (EventSystem.current.currentSelectedGameObject == inputfield.gameObject && Input.GetKeyDown(KeyCode.Return))
-        // {
-        //     string userInput = inputfield.text;
-        //     StartCoroutine(TestDirectionsAPI(userInput));
-        //     inputfield.text = "";
-        // }
-    }
-    void OnInputFieldSubmit(string userInput)
-    {
-        // Only start the API call if the user pressed "Enter" on Android
-        if (!string.IsNullOrEmpty(userInput))
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            StartCoroutine(TestDirectionsAPI(userInput));
-            inputfield.text = "";
+            StartNav();
         }
     }
-
     // Coroutine to handle the geolocation asynchronously and start the directions API request
     IEnumerator TestDirectionsAPI(string destination_query)
     {
-        // Coordinates to test the API with (starting and destination)
+
         // Destroy coordinates in scroll view incase user searches again
         foreach (Transform child in contentParent.transform)
         {
             Destroy(child.gameObject);
         }
-        // Variables to initialize the API with (starting and destination)
         string StartingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
-        string DestinationLocation;
-        // Byrn Apartments
+
         if (StartingLocation == "0,0")
         {
             StartingLocation = "40.810987,-77.892420";
         }
+        string DestinationLocation = "";
 
         // Call async function and wait for the result
         Task<string> geoTask = GetGeolocationAsString(destination_query);
@@ -76,11 +71,9 @@ public class NavigationBar : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Search bar: Geolocation not found");
-            yield break; // Stop further execution if geolocation fails
+            inputfield.text = "Please enter your location";
+            yield break;
         }
-
-
         // Construct the full URL for the request
         string url = $"{baseUrl}&query={StartingLocation}:{DestinationLocation}&subscription-key={apiKey}&travelMode=pedestrian";
         Debug.Log("Search bar: Request URL: " + url); // Log the URL to verify
@@ -106,10 +99,9 @@ public class NavigationBar : MonoBehaviour
                 // Log the successful response
                 string jsonResponse = webRequest.downloadHandler.text;
                 Debug.Log("Search bar: API Response: " + jsonResponse);
+
                 // Deserialize the JSON response
                 DirectionsResponse directionsResponse = JsonConvert.DeserializeObject<DirectionsResponse>(jsonResponse);
-
-
 
                 // Access and log route information, including points
                 if (directionsResponse != null && directionsResponse.Routes != null && directionsResponse.Routes.Length > 0)
@@ -132,6 +124,7 @@ public class NavigationBar : MonoBehaviour
                                 distance.text = $"Given destination is too far, search again";
                                 yield break;
                             }
+
                             // Access the points (latitude and longitude) of each leg
                             if (leg.Points != null && leg.Points.Length > 0)
                             {
@@ -144,7 +137,6 @@ public class NavigationBar : MonoBehaviour
                                     GameObject directionTextObject = Instantiate(directionTextPrefab, contentParent.transform);
                                     TMP_Text directionText = directionTextObject.GetComponent<TMP_Text>();
                                     directionText.text = $"{point.Latitude}, {point.Longitude}";
-
                                 }
                             }
 
@@ -195,10 +187,6 @@ public class NavigationBar : MonoBehaviour
             Debug.LogError("Search bar: Failed to get geolocation for the entered address.");
             return null;
         }
-    }
-    private void OnDestroy()
-    {
-        inputfield.onEndEdit.RemoveListener(OnInputFieldSubmit);
     }
 
     // Direction response classes (unchanged)
