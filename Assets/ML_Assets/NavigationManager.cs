@@ -76,7 +76,7 @@ public class NavigationManager : MonoBehaviour
     public void ReturnToMainMenu()
     {
         navigationPanel.SetActive(true);
-        arSession.enabled = false;
+        arSession.enabled = true;
         SceneManager.LoadScene("AR_Navigation");
     }
 
