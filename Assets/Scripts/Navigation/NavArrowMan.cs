@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class NavArrowMan : MonoBehaviour, IDataPersistence
 {
-    const int maxMarkers = 3;
+    int maxMarkers = 3;
     int markerCount = 0;
-    [SerializeField] GameObject objToSpawn;             // prefab of the marker triangle
-    [SerializeField] GameObject obstacleMarker;         // prefab of the obstacle marker triangle
+    //[SerializeField] GameObject objToSpawn;             // prefab of the marker triangle
+    //[SerializeField] GameObject obstacleMarker;         // prefab of the obstacle marker triangle
     //[SerializeField] GameObject player;                 // reference to player
     [SerializeField] Canvas canvas;                     // reference to canvas
     [SerializeField] UnityEngine.UI.Image NavArrow;     // reference to NavArrow
-    [SerializeField] Camera mainCamera;   // Add a reference to the camera
+    [SerializeField] Camera mainCamera;                 // Add a reference to the camera
+    [SerializeField] GPSObjectPlacer gpsObjectPlacer;   // Reference to the GPSObjectPlacer script
 
     List<GameObject> targets = new List<GameObject>();
     List<GameObject> obstacles = new List<GameObject>();
@@ -38,6 +39,12 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
     // Define a movement threshold (adjust based on your game world scale)
     float movementThreshold = 0.0001f;
 
+    IEnumerator WaitForMarkers()
+    {
+        yield return new WaitForEndOfFrame(); // Wait for the end of the current frame
+        GatherAllMarkers(); // Now gather the markers
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,43 +52,51 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         closestObstacle = Mathf.Infinity;
 
         //place markers
-        PlaceMarker();
+        // PlaceMarker();
 
         gps = GPS.Instance;                         // Get the instance of the GPS script
-        GatherAllMarkers();                         // Gather all existing markers at the start
+        StartCoroutine(WaitForMarkers());           // Gather all existing markers at the start
         previousPlayerVec = Vector3.zero;           // Initialize to zero for the first comparison
     }
 
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("Updating..."); 
+        // Update maxMarkers based on the number of markers in GPSObjectPlacer
+        maxMarkers = gpsObjectPlacer.markers.Count;
         adjustingForObstacle = false;
         adjustmentAngle = 0f;
 
-        /*if (Input.GetButtonDown("Jump") && markerCount < maxMarkers)
-        {
-            PlaceMarker();
-            markerCount++;
-        }*/
+        // Update player position using GPS coordinates
+        playerVec = gpsObjectPlacer.GPSLocationToWorld(gps.latitude, gps.longitude);
 
-        //if (Vector3.Distance(playerVec, previousPlayerVec) > movementThreshold)
+        // Check if the player has moved significantly
+        //if (Vector3.Distance(previousPlayerVec, playerVec) > movementThreshold)
         //{
-            // Update player position using GPS coordinates
-            playerVec = GPSLocationToWorld(gps.latitude, gps.longitude);
+            Debug.Log("significant movement..."); 
+            // Only update if the movement is significant
+            previousPlayerVec = playerVec;
 
             // Remove markers if player is close enough
             RemoveMarkersNearPlayer();
+
             // finds targets
             FindClosestTarget();
+
             // finds obstacles
             FindClosestObstacle();
-
-            // Rotate the NavArrow to point towards the closest marker
-            if (targets.Count > 0)
-            {
-                RotateNavArrow();
-            }
         //}
+
+
+        
+
+        // Rotate the NavArrow to point towards the closest marker
+        if (targets.Count > 0)
+        {
+            Debug.Log("Rotating NavArrow...");
+            RotateNavArrow();
+        }
 
         //Debug that prints info about avoiding obstacle status
         //Debug.Log(adjustingForObstacle + ", Distance: " + closestObstacle.ToString() + ", Angle: " + adjustmentAngle);
@@ -95,28 +110,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
     public void SaveData(ref GameData data)
     {
         data.playerVec = this.playerVec;
-    }
-
-    void PlaceMarker()
-    {
-        var pollockCommonArea = GPSLocationToWorld(40.800767f, -77.857471f);
-        //spawns Navpoints
-        obstacles.Add(Instantiate(objToSpawn, pollockCommonArea, Quaternion.Euler(180, 0, 0)) as GameObject);
-    }
-
-     // Converts GPS latitude and longitude into Unity world position (simplified for a flat map)
-    Vector3 GPSLocationToWorld(float latitude, float longitude)
-    {
-        // Example conversion: scale latitude and longitude to Unity units
-        // Adjust scale factor as needed to fit the game world size
-        float scaleFactor = 1000f;  // You can tweak this based on world size
-
-        float x = longitude * scaleFactor;
-        float z = latitude * scaleFactor;
-
-        // Keep y (altitude) as 0 for now, or can use altitude data from the GPS script
-        return new Vector3(x, 0, z);
-    }
+    }    
 
     void RemoveMarkersNearPlayer()
     {
@@ -129,7 +123,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
             distance = Vector3.Distance(playerVec, targetVec);
 
             // Adjust the distance threshold as needed
-            if (distance < 0.5f) // 0.5f is an example threshold
+            if (distance < 10f)
             {
                 markersToRemove.Add(target);
             }
@@ -188,16 +182,8 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         }
 
         //Debug that prints the closet target name
-        //Debug.Log(closestTargetObj.name);
+        Debug.Log("target object" + closestTargetObj.name);
     }
-
-    void PlaceObstacle()
-    {
-        var pollockCommonArea = GPSLocationToWorld(40.800763f, -78.857829f);
-        //spawns obstacles
-        obstacles.Add(Instantiate(obstacleMarker, pollockCommonArea, Quaternion.Euler(180, 0, 0)) as GameObject);
-    }
-
    void FindClosestObstacle()
     {
         closestObstacle = Mathf.Infinity;
@@ -251,12 +237,12 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         // Smoothly rotate the NavArrow around the Z axis based on the relative direction
         float rotationSpeed = 360f;
         // Update rotation based on distance (Optional visual cue)
-        if (closest < 10f)  // Example: if closer than 10 units
+        if (closest < 30f)  // Example: if closer than 10 units
         {
             rotationSpeed = 720f;  // Rotate faster when closer
             NavArrow.color = Color.red;  // Change arrow color
         }
-        else if (closest < 20f)
+        else if (closest < 720f)
         {
             NavArrow.color = Color.yellow;
         }
