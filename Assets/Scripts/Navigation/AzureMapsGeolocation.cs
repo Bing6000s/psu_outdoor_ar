@@ -16,13 +16,21 @@ public class AzureMapsGeocodingExample
 
     public static async Task<GeolocationResult> GetGeolocation(string apiKey, string query)
     {
-        // Use actual GPS coordinates or fallback to default location (The Bryn Apartments)
-        double latitude = GPS.Instance.latitude == 0 ? 40.810987 : GPS.Instance.latitude;
-        double longitude = GPS.Instance.longitude == 0 ? -77.892420 : GPS.Instance.longitude;
+        double latitude = GPS.Instance.latitude;
+        double longitude = GPS.Instance.longitude;
+        if (GPS.Instance.latitude == 0 &&  GPS.Instance.longitude == 0)
+        {
+            latitude = 40.810987;
+            longitude = -77.892420;
+        }
 
+
+        string lat = latitude.ToString();
+        string lon = longitude.ToString();
+        string limit = "1";
+        string radius = "3000";
         // Construct base URL
-        string url = $"https://atlas.microsoft.com/search/fuzzy/json?lat={latitude}&lon={longitude}&radius=5000";
-
+        string url = $"https://atlas.microsoft.com/search/fuzzy/json?";
         using (HttpClient client = new HttpClient())
         {
             // Build query parameters
@@ -31,7 +39,11 @@ public class AzureMapsGeocodingExample
                 { "api-version", "1.0" },
                 { "subscription-key", apiKey },
                 { "query", query },
-                { "limit", "1" }
+                { "lat", lat },
+                { "lon", lon },
+                {"limit", limit },
+                { "radius", radius } // Changed "Raidus" to "radius"
+
             };
 
             // Add query parameters to the URL

@@ -13,8 +13,6 @@ public class NavigationManager : MonoBehaviour
     public Button mainMenuButton;
     public Button orButton;
     public ArrowDirection arrowDirectionScript;
-    public NavigationBar navigationbar;
-
     private List<string> storedLocations = new List<string>();
 
     public void Start()
@@ -60,15 +58,8 @@ public class NavigationManager : MonoBehaviour
         float lon = float.Parse(coordinates[3]);
         // Hide the navigation panel
         navigationPanel.SetActive(false);
-<<<<<<< HEAD
 
-
-=======
-        
->>>>>>> parent of 291504a (Added the elevation script inside the scripts folder, untested.)
-        // Start the AR Session to display the camera feed
         //arSession.enabled = false;
-        navigationbar.inputfield.text = $"{lat},{lon}";
         SceneManager.LoadScene("AR_Navigation");
 
     }
