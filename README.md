@@ -6,8 +6,13 @@ End goals:
 2. Choose from points of interest to navigate to.
 3. Navigate to that point of interest using GPS, avoiding obstacles
 
+#### Terms and vocabulary
+        GET SEARCH FUZZY - the api that handles the conversion of query(ex: old main, penn state) to geolocation
+        GET ROUTE DIRECTIONS - the api that gives route information based on two geolcoation, starting location and destination location.
 
-Edit 10/24/2024
+#### Edit Logs 
+
+10/24/2024
 1. You don't need to switch the Starting Location variable  now.
 2. Some tips: Build settings:
     1. in project, go to edit, project settings, player. Scroll down to Resolution and Presentation
@@ -18,3 +23,9 @@ Edit 10/24/2024
 4. Camera should work now. Make sure to toggle app  permission like  this:
 >settings -> security and privacy -> permission manager ->  camera -> scroll to not allowed -> app -> allow only while  using the app
  
+
+10/30/24
+Merge request to main. 
+
+Further tested the abnormal behavior of GET SEARCH FUZZY, fixed some of the parameters. 
+Fixed the merged to main.

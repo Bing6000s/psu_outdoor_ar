@@ -68,7 +68,7 @@ public class LocationManager : MonoBehaviour
         string locationName = locationNameInputField.text;
         if (string.IsNullOrEmpty(locationName))
         {
-            Debug.LogError("Please provide a name for the location.");
+            Debug.Log("Please provide a name for the location.");
             return;
         }
 
@@ -77,7 +77,7 @@ public class LocationManager : MonoBehaviour
         // Check if the location already exists in the list
         if (storedLocations.Contains(newLocation))
         {
-            Debug.LogError("This location has already been stored.");
+            Debug.Log("This location has already been stored.");
             return;
         }
 
@@ -101,7 +101,7 @@ public class LocationManager : MonoBehaviour
 
     public void OnNavigationButtonClicked()
     {
-        SceneManager.LoadScene("Navigation");
+        SceneManager.LoadScene("SavedLocations");
     }
 
     public void OnClearLocationsButtonClicked()

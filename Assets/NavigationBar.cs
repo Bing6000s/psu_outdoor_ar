@@ -131,12 +131,12 @@ public class NavigationBar : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning("Search bar: No legs found in the route.");
+                        Debug.Log("Search bar: No legs found in the route.");
                     }
                 }
                 else
                 {
-                    Debug.LogWarning("Search bar: No routes found in the response.");
+                    Debug.Log("Search bar: No routes found in the response.");
                 }
             }
             // Instantiate distance here.
@@ -159,7 +159,7 @@ public class NavigationBar : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Search bar: Failed to get geolocation for the entered address.");
+            Debug.Log("Search bar: Failed to get geolocation for the entered address.");
             return null;
         }
     }

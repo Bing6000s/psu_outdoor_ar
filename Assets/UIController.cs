@@ -11,8 +11,6 @@ public class UIController : MonoBehaviour
     public Button myImagesButton;
     public Button settingsButton;
 
-    public NavigationManager navigationManager;
-    // Start is called before the first frame update
     void Start()
     {
         var root = GetComponent<UIDocument>().rootVisualElement;

@@ -16,19 +16,40 @@ public class AzureMapsGeocodingExample
 
     public static async Task<GeolocationResult> GetGeolocation(string apiKey, string query)
     {
-        // Define default coordinates if GPS coordinates are not set
-        double latitude = GPS.Instance.latitude != 0 ? GPS.Instance.latitude : 40.810987;
-        double longitude = GPS.Instance.longitude != 0 ? GPS.Instance.longitude : -77.893880;
+        double latitude = GPS.Instance.latitude;
+        double longitude = GPS.Instance.longitude;
+        if (GPS.Instance.latitude == 0 &&  GPS.Instance.longitude == 0)
+        {
+            latitude = 40.810987;
+            longitude = -77.892420;
+        }
 
-        // Construct base URL with subscription key and coordinates
-        string url = $"https://atlas.microsoft.com/search/fuzzy/json?api-version=1.0&subscription-key={apiKey}&lat={latitude}&lon={longitude}&radius=1000";
 
+        string lat = latitude.ToString();
+        string lon = longitude.ToString();
+        string limit = "1";
+        string radius = "3000";
+        // Construct base URL
+        string url = $"https://atlas.microsoft.com/search/fuzzy/json?";
         using (HttpClient client = new HttpClient())
         {
-            // Add the query parameter to the URL
+            // Build query parameters
+            var queryParams = new Dictionary<string, string>
+            {
+                { "api-version", "1.0" },
+                { "subscription-key", apiKey },
+                { "query", query },
+                { "lat", lat },
+                { "lon", lon },
+                {"limit", limit },
+                { "radius", radius } // Changed "Raidus" to "radius"
+
+            };
+
+            // Add query parameters to the URL
             var uriBuilder = new UriBuilder(url)
             {
-                Query = $"query={Uri.EscapeDataString(query)}&limit=1"
+                Query = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={Uri.EscapeDataString(kvp.Value)}"))
             };
 
             try
