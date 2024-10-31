@@ -6,13 +6,24 @@ EditorUserSettings:
   serializedVersion: 4
   m_ConfigSettings:
     RecentlyUsedSceneGuid-0:
+<<<<<<< HEAD
       value: 07060507565059590b5c5c764121094447161b727e2c723678794f65e3e4363b
+=======
+      value: 5554575707060d5e095a5d72142059444e4f1d7c7c7e706375284962b7b6303b
+      flags: 0
+    RecentlyUsedSceneGuid-1:
+      value: 51505605010d08095b0c5a7645260b444f4e1d7f7d7822612f2f4e61b5b1323a
+>>>>>>> parent of 291504a (Added the elevation script inside the scripts folder, untested.)
       flags: 0
     RecentlyUsedSceneGuid-1:
       value: 51505605010d08095b0c5a7645260b444f4e1d7f7d7822612f2f4e61b5b1323a
       flags: 0
     RecentlyUsedSceneGuid-2:
+<<<<<<< HEAD
       value: 5554575707060d5e095a5d72142059444e4f1d7c7c7e706375284962b7b6303b
+=======
+      value: 07060507565059590b5c5c764121094447161b727e2c723678794f65e3e4363b
+>>>>>>> parent of 291504a (Added the elevation script inside the scripts folder, untested.)
       flags: 0
     RecentlyUsedSceneGuid-3:
       value: 550651555057080d080c5521467b5e44124f4f7c2d2e706378704c60e3b26768

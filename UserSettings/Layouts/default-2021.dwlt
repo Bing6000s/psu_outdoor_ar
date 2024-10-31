@@ -19,7 +19,11 @@ MonoBehaviour:
     width: 1706.6667
     height: 976
   m_ShowMode: 4
+<<<<<<< HEAD
   m_Title: Game
+=======
+  m_Title: Hierarchy
+>>>>>>> parent of 291504a (Added the elevation script inside the scripts folder, untested.)
   m_RootView: {fileID: 3}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -191,7 +195,11 @@ MonoBehaviour:
       y: 21
       width: 1706.6666
       height: 886
+<<<<<<< HEAD
     m_Scale: {x: 1.3414981, y: 1.3414981}
+=======
+    m_Scale: {x: 1, y: 1}
+>>>>>>> parent of 291504a (Added the elevation script inside the scripts folder, untested.)
     m_Translation: {x: 853.3333, y: 443}
     m_MarginLeft: 0
     m_MarginRight: 0
@@ -199,10 +207,17 @@ MonoBehaviour:
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
+<<<<<<< HEAD
       x: -636.10474
       y: -330.2278
       width: 1272.2095
       height: 660.4556
+=======
+      x: -853.3333
+      y: -443
+      width: 1706.6666
+      height: 886
+>>>>>>> parent of 291504a (Added the elevation script inside the scripts folder, untested.)
     m_MinimalGUI: 1
   m_defaultScale: 1
   m_LastWindowPixelSize: {x: 2560, y: 1360.5}
