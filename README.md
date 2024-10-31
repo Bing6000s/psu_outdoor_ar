@@ -28,3 +28,6 @@ referenced: https://www.youtube.com/watch?v=HkNVp04GOEI
 ## 10/28
 Data got corrupted, remade everything. :( 
     3 hours spent
+## 10/30/24
+updated Nav arrow to work and array of points. still need to test if objects placed before start can be found.
+    3 hours spent
