@@ -9,6 +9,7 @@ public class GPS : MonoBehaviour
     public float longitude;
     public float altitude;
     public float waittime = 1;
+    [SerializeField] Camera mainCamera;                 // Add a reference to the camera
 
     private void Awake()
     {
@@ -36,6 +37,7 @@ public class GPS : MonoBehaviour
         }
 
         // Start the location service
+        Input.compass.enabled = true;
         Input.location.Start();
 
         // Wait until the location service initializes
@@ -81,4 +83,16 @@ public class GPS : MonoBehaviour
             yield return new WaitForSeconds(waittime);  // wait for the next update
         }
     }
+    // this funcation will align the camera with true north. It isn't precise.
+    void updateCameraToTrueNorth()
+    {
+        float heading = Input.compass.trueHeading; //compass heading in degree
+        mainCamera.transform.rotation = Quaternion.Euler(0,heading * 0.95f,0);  //rotate camera around
+    }
+
+    void Update()
+    {
+        updateCameraToTrueNorth();
+    }
+
 }

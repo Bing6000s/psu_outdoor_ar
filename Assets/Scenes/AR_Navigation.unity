@@ -4017,6 +4017,7 @@ MonoBehaviour:
   longitude: 0
   altitude: 0
   waittime: 1
+  mainCamera: {fileID: 0}
 --- !u!4 &1229483998
 Transform:
   m_ObjectHideFlags: 0
@@ -4936,9 +4937,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1127298727}
+      - m_Target: {fileID: 1127298726}
         m_TargetAssemblyTypeName: NavigationController, Assembly-CSharp
-        m_MethodName: NavigationButtonPressed
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5040,7 +5041,7 @@ MonoBehaviour:
   obstacleMarker: {fileID: 7246997975359138464, guid: d9b7b8d87a090f440a114448d134e80e, type: 3}
   gpsCoordinates:
   - {x: -77.85716, y: 40.80151}
-  - {x: 0.0002, y: 0.0004}
+  - {x: 40.80151, y: -77.85716}
   markers: []
 --- !u!4 &1440421838
 Transform:
