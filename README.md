@@ -29,3 +29,15 @@ Merge request to main.
 
 Further tested the abnormal behavior of GET SEARCH FUZZY, fixed some of the parameters. 
 Fixed the merged to main.
+
+
+11/7/24
+Getting hands on Google Geospatial API. Google has a demo that scene, and I've been playing with the demo scene
+for now. You can place objects in Unity Editor, and anchoring it usign lontitude, latitude and altitude. In the app,
+you can also tap with your finger to anchor a few markers on the ground, with the direction. 
+
+Noticeable behaivor - Mapping a car model next to my door: 
+1. Mapping an object strait to the map is slightly off. You can see this in the 5 minutes demo that it's a few buildings apart from where it's really located.
+2. Mapping an object using the Geospatial mapping is really off. I mapped the object using geospatial and altitude 
+to my apartment, but the thing looks like it's over to TJmax's direciton, I have drive about 2 minutes and it's not 
+worth it to look where it landed at.
