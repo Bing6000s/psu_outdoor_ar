@@ -856,11 +856,11 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: ENABLE_TENSORFLOW
+    Android: ENABLE_TENSORFLOW;ARCORE_INTERNAL_GEOSPATIAL_CREATOR_ENABLED
     Server: ENABLE_TENSORFLOW
     Standalone: ENABLE_TENSORFLOW
     WebGL: ENABLE_TENSORFLOW
-    iPhone: ENABLE_TENSORFLOW
+    iPhone: ENABLE_TENSORFLOW;ARCORE_INTERNAL_GEOSPATIAL_CREATOR_ENABLED
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
