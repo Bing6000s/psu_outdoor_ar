@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using TMPro;
 using System.Threading.Tasks;
 using UnityEngine.UI;
+using System;
 
 public class NavigationBar : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class NavigationBar : MonoBehaviour
     {
         string userInput = inputfield.text;
         StartCoroutine(TestDirectionsAPI(userInput));
+        inputfield.text = "";
     }
 
     private void Start()
@@ -38,13 +40,19 @@ public class NavigationBar : MonoBehaviour
     IEnumerator TestDirectionsAPI(string destination_query)
     {
 
-        string StartingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
+        // Destroy coordinates in scroll view incase user searches again
+        foreach (Transform child in contentParent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        TMP_Text distance = distanceText.GetComponent<TMP_Text>();
 
+        string StartingLocation = $"{GPS.Instance.latitude},{GPS.Instance.longitude}";
         if (StartingLocation == "0,0")
         {
             StartingLocation = "40.810987,-77.892420";
         }
-        string DestinationLocation = "40.798402,-77.861852";
+        string DestinationLocation = "";
 
         // Call async function and wait for the result
         Task<string> geoTask = GetGeolocationAsString(destination_query);
@@ -65,7 +73,8 @@ public class NavigationBar : MonoBehaviour
         }
         else
         {
-            inputfield.text = "Please enter your location";
+            distance.text = $"Given destination is too far, or does not exist. Search again";
+            yield break;
         }
         // Construct the full URL for the request
         string url = $"{baseUrl}&query={StartingLocation}:{DestinationLocation}&subscription-key={apiKey}&travelMode=pedestrian";
@@ -77,6 +86,8 @@ public class NavigationBar : MonoBehaviour
             // Send the request and wait for the response
             yield return webRequest.SendWebRequest();
             int totalDistance = 0;
+            int totalTravelTime = 0;
+            
             // Error occurs
             if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
@@ -105,6 +116,7 @@ public class NavigationBar : MonoBehaviour
                         {
                             Debug.Log("Search bar result: Travel Time: " + leg.Summary.TravelTimeInSeconds + " seconds");
                             Debug.Log("Search bar result: Travel Length: " + leg.Summary.LengthInMeters + " meters");
+                            totalTravelTime += leg.Summary.TravelTimeInSeconds;
                             totalDistance += leg.Summary.LengthInMeters;
 
                             // Access the points (latitude and longitude) of each leg
@@ -119,7 +131,6 @@ public class NavigationBar : MonoBehaviour
                                     GameObject directionTextObject = Instantiate(directionTextPrefab, contentParent.transform);
                                     TMP_Text directionText = directionTextObject.GetComponent<TMP_Text>();
                                     directionText.text = $"{point.Latitude}, {point.Longitude}";
-
                                 }
                             }
 
@@ -131,17 +142,20 @@ public class NavigationBar : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("Search bar: No legs found in the route.");
+                        Debug.LogWarning("Search bar: No legs found in the route.");
                     }
                 }
                 else
                 {
-                    Debug.Log("Search bar: No routes found in the response.");
+                    Debug.LogWarning("Search bar: No routes found in the response.");
                 }
             }
-            // Instantiate distance here.
-            TMP_Text distance = distanceText.GetComponent<TMP_Text>();
-            distance.text = $"Total Distance: {totalDistance}m";
+
+            // Convert distance to miles, and travel time to minutes. Then display to user.
+            int totalTravelTimeMinutes = totalTravelTime / 60 + 1;
+            double totalDistanceMiles = Math.Round(totalDistance / 1609.344, 2);
+            distance.text = $"{totalDistanceMiles} miles \n {totalTravelTimeMinutes} minutes";
+
         }
     }
 
@@ -159,7 +173,7 @@ public class NavigationBar : MonoBehaviour
         }
         else
         {
-            Debug.Log("Search bar: Failed to get geolocation for the entered address.");
+            Debug.LogError("Search bar: Failed to get geolocation for the entered address.");
             return null;
         }
     }

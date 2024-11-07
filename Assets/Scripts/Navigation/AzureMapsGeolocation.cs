@@ -18,7 +18,7 @@ public class AzureMapsGeocodingExample
     {
         double latitude = GPS.Instance.latitude;
         double longitude = GPS.Instance.longitude;
-        if (GPS.Instance.latitude == 0 &&  GPS.Instance.longitude == 0)
+        if (GPS.Instance.latitude == 0 && GPS.Instance.longitude == 0)
         {
             latitude = 40.810987;
             longitude = -77.892420;
@@ -42,7 +42,7 @@ public class AzureMapsGeocodingExample
                 { "lat", lat },
                 { "lon", lon },
                 {"limit", limit },
-                { "radius", radius } // Changed "Raidus" to "radius"
+                { "radius", radius } // Changed "Radius" to "radius"
 
             };
 
