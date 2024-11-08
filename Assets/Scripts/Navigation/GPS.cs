@@ -11,6 +11,9 @@ public class GPS : MonoBehaviour
     public float waittime = 1;
     [SerializeField] Camera mainCamera;                 // Add a reference to the camera
 
+    private float initialHeading = 0f;  // Stores the initial compass heading
+    private bool isInitialHeadingSet = false;
+
     private void Awake()
     {
         Instance = this;
@@ -41,10 +44,10 @@ public class GPS : MonoBehaviour
         Input.location.Start();
 
         // Wait until the location service initializes
-        int maxWait = 20;
+        float maxWait = 20f;
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
-            yield return new WaitForSeconds(waittime);
+            yield return new WaitForSeconds(1);
             maxWait--;
         }
 
@@ -62,37 +65,51 @@ public class GPS : MonoBehaviour
             yield break;
         }
 
-        // Update GPS coordinates continuously
-        while (true)
+        // Retrieve initial GPS data
+        latitude = Input.location.lastData.latitude;
+        longitude = Input.location.lastData.longitude;
+        altitude = Input.location.lastData.altitude;
+
+        // Capture the initial heading to use as the reference point
+        StartCoroutine(CaptureInitialHeading());
+
+    }
+
+    private IEnumerator CaptureInitialHeading()
+    {
+        yield return new WaitForSeconds(2);  //wait for a stable compass reading
+
+        if (!isInitialHeadingSet && Input.compass.enabled)
         {
-            if (Input.location.status == LocationServiceStatus.Running)
-            {
-                // Update latitude, longitude, and altitude
-                latitude = Input.location.lastData.latitude;
-                longitude = Input.location.lastData.longitude;
-                altitude = Input.location.lastData.altitude;
-
-                Debug.Log($"Updated GPS Coordinates: Latitude: {latitude}, Longitude: {longitude}, Altitude: {altitude}");
-            }
-            else
-            {
-                Debug.LogError("Unable to update location");
-            }
-
-            // Wait before the next update
-            yield return new WaitForSeconds(waittime);  // wait for the next update
+            initialHeading = Input.compass.trueHeading;
+            isInitialHeadingSet = true;
+            Debug.Log("Captured initial heading: " + initialHeading);
         }
     }
-    // this funcation will align the camera with true north. It isn't precise.
-    void updateCameraToTrueNorth()
+
+    // Method to get the adjusted heading relative to the initial direction
+    public float GetRelativeHeading()
     {
-        float heading = Input.compass.trueHeading; //compass heading in degree
-        mainCamera.transform.rotation = Quaternion.Euler(0,heading * 0.95f,0);  //rotate camera around
+        if (isInitialHeadingSet)
+        {
+            float currentHeading = Input.compass.trueHeading;
+            return (currentHeading - initialHeading + 360) % 360;  // Normalized to 0-360 degrees
+        }
+        return 0;
     }
 
     void Update()
     {
-        updateCameraToTrueNorth();
+        if (isInitialHeadingSet)
+        {
+            float relativeHeading = GetRelativeHeading();
+            // Use relativeHeading to place objects or update HUD elements
+
+            // Continuously update GPS data
+            latitude = Input.location.lastData.latitude;
+            longitude = Input.location.lastData.longitude;
+            altitude = Input.location.lastData.altitude;
+        }
     }
 
 }

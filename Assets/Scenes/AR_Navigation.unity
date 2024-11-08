@@ -2953,6 +2953,7 @@ GameObject:
   - component: {fileID: 907062224}
   - component: {fileID: 907062223}
   - component: {fileID: 907062222}
+  - component: {fileID: 907062225}
   m_Layer: 0
   m_Name: AR Session Origin
   m_TagString: Untagged
@@ -3029,6 +3030,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RaycastPrefab: {fileID: 0}
+--- !u!114 &907062225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 907062219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 728ad7fae8e460a4ba41265c7308d757, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AnchorPrefab: {fileID: 4287159603850846217, guid: 5de2ebee314a6094a9de27a0e5340cd7, type: 3}
 --- !u!1 &960518270
 GameObject:
   m_ObjectHideFlags: 0
@@ -3209,6 +3223,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 744f8fa862f713a4bad4c7a7999c73d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objToSpawn: {fileID: 4591669933845441009, guid: 7bb620b9a026d674395b43bd1f908047, type: 3}
+  obstacleMarker: {fileID: 7246997975359138464, guid: d9b7b8d87a090f440a114448d134e80e, type: 3}
   canvas: {fileID: 778610219}
   NavArrow: {fileID: 1774627650}
   mainCamera: {fileID: 839196073}

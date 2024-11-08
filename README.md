@@ -31,3 +31,86 @@ Data got corrupted, remade everything. :(
 ## 10/30/24
 updated Nav arrow to work and array of points. still need to test if objects placed before start can be found.
     3 hours spent
+
+## 11/7/24
+## Files Modified:
+- **NavArrowMan.cs**
+- **GPSObjectPlacer.cs**
+- **GPS.cs**
+- **UpdateCoordinate.cs**
+
+### Changes in `NavArrowMan.cs`
+- **Added** new method `WaitForMarkers()`:
+  - Ensures markers are gathered after the end of the current frame.
+  - Calls `GatherAllMarkers()` to update marker list.
+  
+- **Implemented** `AddMarker()`:
+  - Added functionality to add markers to the `targets` or `obstacles` list based on the `isObstacle` flag.
+  - Instantiates a new marker at the specified position.
+
+- **Updated** the `Start()` method:
+  - Initializes the GPS system.
+  - Calls `WaitForMarkers()` to gather markers at the start.
+
+- **Modified** the `Update()` method:
+  - Checks player movement and updates markers accordingly.
+  - Added logic to call `FindClosestTarget()` and `FindClosestObstacle()` based on player movement.
+
+- **Added** marker removal functionality in `RemoveMarkersNearPlayer()`:
+  - Removes markers that are too close to the player (within 10 units).
+
+- **Refined** `FindClosestTarget()` and `FindClosestObstacle()` methods:
+  - Updated logic to find the closest target and obstacle using `Vector3.Distance()`.
+
+- **Updated** `RotateNavArrow()`:
+  - Adjusted the rotation of the NavArrow to point towards the closest target. Without the camera dependency. 
+  - Modified the rotation speed and color based on the distance to the target.
+
+- **Modified** `SaveData()` and `LoadData()`:
+  - Allows saving and loading of player position using `GameData`.
+
+---
+
+### Changes in `GPSObjectPlacer.cs`
+- **Added** `PlaceObjectAtGPS()` method:
+  - Converts GPS coordinates to Unity world position and places a marker at the corresponding location.
+
+- **Updated** `Start()` method:
+  - Iterates through the list of GPS coordinates and places markers at each location.
+
+- **Modified** `GPSLocationToWorld()`:
+  - Converts GPS latitude and longitude into Unity world coordinates using a `scaleFactor`.
+
+- **Linked** with `NavArrowMan`:
+  - Added a reference to `NavArrowMan` and called `AddMarker()` for placing markers in the game world.
+
+---
+
+### Changes in `GPS.cs`
+- **Refined** GPS data fetching:
+  - Ensures the GPS service is started and initializes properly.
+  - Requests location and compass permissions at the start.
+
+- **Added** `CaptureInitialHeading()`:
+  - Captures the initial compass heading to be used for relative heading calculations.
+
+- **Updated** `GetRelativeHeading()`:
+  - Computes the relative heading between the initial heading and the current heading.
+
+- **Improved** the `Update()` method:
+  - Continuously updates GPS coordinates and heading data.
+  - Ensures that the heading and location data are used for object placement and HUD updates.
+
+---
+
+### Changes in `UpdateCoordinate.cs`
+- **Linked** GPS data to UI:
+  - Continuously updates the UI with the current GPS coordinates and distance.
+  - Displays latitude, longitude, altitude, and distance on the UI.
+  
+- **Added** `coordinates.text` update:
+  - Updates the UI text with the latest GPS data in the `Update()` method.
+
+- **Added** a null check for `GPS.Instance`:
+  - Ensures the GPS instance is available before updating the UI.
+  - Displays a warning if the GPS instance is not available.

@@ -6,9 +6,27 @@ using UnityEngine.UI;
 public class UpdateCoordinate : MonoBehaviour
 {
     public Text coordinates;
+    GPS GPS;                    //reference GPS script
 
     void Update()
     {
-        coordinates.text = "Latitude:" + GPS.Instance.latitude.ToString() + "\nLongitude:" + GPS.Instance.longitude.ToString() + "\nAltitude:" + GPS.Instance.altitude.ToString() + "\nDistance:" + Distance.distance.ToString() + "m";
+        if (GPS.Instance != null)
+        {
+            float latitude = GPS.Instance.latitude;
+            float longitude = GPS.Instance.longitude;
+            float altitude = GPS.Instance.altitude;
+            float distance = Distance.distance;
+            coordinates.text = $"Latitude: {latitude.ToString()}\n" +
+                               $"Longitude: {longitude.ToString()}\n" +
+                               $"Altitude: {altitude.ToString()} meters \n" +
+                               $"Distance: {distance.ToString()} m";
+
+            Debug.Log($"Updating Coordinates: Lat: {latitude}, Lon: {longitude}, Alt: {altitude}, Dist: {distance}");
+        }
+        else
+        {
+            coordinates.text = "Fetching GPS data...";
+            Debug.LogWarning("GPS Instance not available!");
+        }
     }
 }

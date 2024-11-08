@@ -6,8 +6,8 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
 {
     int maxMarkers = 3;
     int markerCount = 0;
-    //[SerializeField] GameObject objToSpawn;             // prefab of the marker triangle
-    //[SerializeField] GameObject obstacleMarker;         // prefab of the obstacle marker triangle
+    [SerializeField] GameObject objToSpawn;             // prefab of the marker triangle
+    [SerializeField] GameObject obstacleMarker;         // prefab of the obstacle marker triangle
     //[SerializeField] GameObject player;                 // reference to player
     [SerializeField] Canvas canvas;                     // reference to canvas
     [SerializeField] UnityEngine.UI.Image NavArrow;     // reference to NavArrow
@@ -38,6 +38,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
 
     // Define a movement threshold (adjust based on your game world scale)
     float movementThreshold = 0.0001f;
+    private float initialDeviceHeading = 0f;
 
     IEnumerator WaitForMarkers()
     {
@@ -55,6 +56,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         // PlaceMarker();
 
         gps = GPS.Instance;                         // Get the instance of the GPS script
+        initialDeviceHeading = gps.GetRelativeHeading();  // Capture the initial device heading
         StartCoroutine(WaitForMarkers());           // Gather all existing markers at the start
         previousPlayerVec = Vector3.zero;           // Initialize to zero for the first comparison
     }
@@ -88,9 +90,6 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
             FindClosestObstacle();
         //}
 
-
-        
-
         // Rotate the NavArrow to point towards the closest marker
         if (targets.Count > 0)
         {
@@ -100,6 +99,34 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
 
         //Debug that prints info about avoiding obstacle status
         //Debug.Log(adjustingForObstacle + ", Distance: " + closestObstacle.ToString() + ", Angle: " + adjustmentAngle);
+    }
+
+    public void AddMarker(Vector3 position, bool isObstacle = false)
+    {
+        // Determine which prefab to use based on the marker type
+        GameObject markerPrefab = isObstacle ? obstacleMarker : objToSpawn;
+        
+        if (markerPrefab == null)
+        {
+            Debug.LogError("Marker prefab not set in inspector!");
+            return;
+        }
+
+        // Instantiate the marker at the specified position
+        GameObject newMarker = Instantiate(markerPrefab, position, Quaternion.identity);
+        
+        // Add to the respective list
+        if (isObstacle)
+        {
+            obstacles.Add(newMarker);
+            newMarker.tag = "Obstacle"; // Set tag for identification
+        }
+        else
+        {
+            targets.Add(newMarker);
+            newMarker.tag = "Mark"; // Set tag for identification
+            markerCount++;
+        }
     }
 
     public void LoadData(GameData data)
@@ -221,39 +248,53 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
 
     void RotateNavArrow()
     {
+        // Get the relative heading from the GPS
+        float relativeHeading = gps.GetRelativeHeading();
+
         // Project the direction vector onto the X-Z plane
-        Vector2 direction2D = new Vector2(direction.x, direction.z);
+        Vector2 direction2D = new Vector2(direction.x, direction.z).normalized;
 
         // Get the camera's forward direction projected onto the X-Z plane
-        Vector3 cameraForward = mainCamera.transform.forward;
-        Vector2 cameraForward2D = new Vector2(cameraForward.x, cameraForward.z).normalized;
+        //! removed so the camera position no longer affects orientation
+        //Vector3 cameraForward = mainCamera.transform.forward;
+        //Vector2 cameraForward2D = new Vector2(cameraForward.x, cameraForward.z).normalized;
 
-        // Calculate the relative direction from the camera to the target
-        float angleBetween = Vector2.SignedAngle(cameraForward2D, direction2D);
+        // Calculate the relative direction from the target to relative heading (true north).
+        //float angleBetween = Vector2.SignedAngle(cameraForward2D, direction2D);
+
+        // Adjust the target angle based on the initial device heading to ensure consistent rotation
+        float targetAngle = Mathf.Atan2(targetDirection2D.y, targetDirection2D.x) * Mathf.Rad2Deg;
+        float adjustedAngle = targetAngle - (relativeHeading - initialDeviceHeading);
 
         // Get the current angle of the NavArrow around the Z axis
         float currentAngle = NavArrow.transform.eulerAngles.z;
 
         // Smoothly rotate the NavArrow around the Z axis based on the relative direction
         float rotationSpeed = 360f;
-        // Update rotation based on distance (Optional visual cue)
-        if (closest < 30f)  // Example: if closer than 10 units
-        {
-            rotationSpeed = 720f;  // Rotate faster when closer
-            NavArrow.color = Color.red;  // Change arrow color
-        }
-        else if (closest < 720f)
-        {
-            NavArrow.color = Color.yellow;
-        }
-        else
-        {
-            NavArrow.color = Color.green;
-        }
-        float newAngle = Mathf.MoveTowardsAngle(currentAngle, angleBetween - adjustmentAngle, rotationSpeed * Time.deltaTime);
+
+        // Adjust the angle based on the compass heading
+        //float adjustedAngle = angleBetween - relativeHeading;
+        float newAngle = Mathf.MoveTowardsAngle(currentAngle, adjustedAngle - adjustmentAngle, rotationSpeed * Time.deltaTime);
 
         // Apply the new angle to the NavArrow's rotation around the Z axis
         NavArrow.transform.rotation = Quaternion.Euler(0f, 0f, newAngle);
+        UpdateNavArrowColor();
 
+    }
+    void UpdateNavArrowColor()
+    {
+        // Update the color based on distance to the closest target
+        if (closest < 30f)
+        {
+            NavArrow.color = Color.red;  // Close to the target
+        }
+        else if (closest < 720f)
+        {
+            NavArrow.color = Color.yellow;  // Medium distance
+        }
+        else
+        {
+            NavArrow.color = Color.green;  // Far away
+        }
     }
 }

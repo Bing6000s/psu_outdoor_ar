@@ -11,6 +11,7 @@ public class GPSObjectPlacer : MonoBehaviour
     public List<GameObject> markers = new List<GameObject>();       // List of placed markers
 
     float scaleFactor = 1000f;                                      // Conversion factor for GPS to Unity world space, adjust based on your scene size
+    NavArrowMan arrowMan;                                           //reference to Arrow Manger
 
     void Start()
     {
@@ -29,6 +30,9 @@ public class GPSObjectPlacer : MonoBehaviour
         
         // Instantiate the object at the calculated world position
         Instantiate(objToSpawn, worldPosition, Quaternion.identity);
+
+        // Add a new target marker (set the second argument to `true` to add as obstacle)
+        arrowMan.AddMarker(worldPosition, false);
     }
 
     // Converts GPS latitude and longitude to Unity world position
