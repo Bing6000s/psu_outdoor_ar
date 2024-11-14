@@ -114,3 +114,27 @@ updated Nav arrow to work and array of points. still need to test if objects pla
 - **Added** a null check for `GPS.Instance`:
   - Ensures the GPS instance is available before updating the UI.
   - Displays a warning if the GPS instance is not available.
+
+## 11/14/24
+## Files Modified:
+- **NavArrowMan.cs**
+- **GPSObjectPlacer.cs**
+- **GPS.cs**
+- **UpdateCoordinate.cs**  
+
+  5 hours spent making sure the GPS to world it right. it isn't
+
+  ### Created `GPSEncoder.cs`
+  - **Linked** with `NavArrowMan` and `GPSObjectPlacer`:
+    - Added a reference to `GPSToUCS()` method for placing markers in the game world as GeoLocation.
+
+  ### Changes in `GPSObjectPlacer.cs`
+- **Updated** `PlaceObjectAtGPS()` method:
+  - Converts GPS coordinates to Unity world position and places a marker at the corresponding location with new function.
+
+- **replaced** `GPSLocationToWorld()` with `GPSEncoder` `GPSToUCS()` method:
+  - current conversion failed to accuracy place points. Created new script and methods to be more precise. 
+
+  ### Changes in `UpdateCoordinate.cs`
+  - **Updated** `updateText` method:
+    - When called the display text will be updated.

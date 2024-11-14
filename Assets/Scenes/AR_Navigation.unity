@@ -2732,15 +2732,15 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.1
-  far clip plane: 20
+  near clip plane: 0.01
+  far clip plane: 0.02
   field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -3229,6 +3229,7 @@ MonoBehaviour:
   NavArrow: {fileID: 1774627650}
   mainCamera: {fileID: 839196073}
   gpsObjectPlacer: {fileID: 1440421837}
+  inputVector: {x: 40.800587, y: -77.85742}
 --- !u!1 &1022524552
 GameObject:
   m_ObjectHideFlags: 0
@@ -5034,6 +5035,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1440421838}
   - component: {fileID: 1440421837}
+  - component: {fileID: 1440421839}
   m_Layer: 0
   m_Name: GPSPlacer
   m_TagString: Untagged
@@ -5056,8 +5058,7 @@ MonoBehaviour:
   objToSpawn: {fileID: 4591669933845441009, guid: 7bb620b9a026d674395b43bd1f908047, type: 3}
   obstacleMarker: {fileID: 7246997975359138464, guid: d9b7b8d87a090f440a114448d134e80e, type: 3}
   gpsCoordinates:
-  - {x: -77.85716, y: 40.80151}
-  - {x: 40.80151, y: -77.85716}
+  - {x: 40.80151, y: -77.85716, z: 329.2}
   markers: []
 --- !u!4 &1440421838
 Transform:
@@ -5074,6 +5075,23 @@ Transform:
   m_Father: {fileID: 963799477}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1440421839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440421836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3be131c27cfbc40eaad869ba8bc3f2a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  latitude: 0
+  longitude: 0
+  altitude: 0
+  waittime: 1
+  mainCamera: {fileID: 839196073}
 --- !u!1 &1440860271
 GameObject:
   m_ObjectHideFlags: 0
@@ -7495,7 +7513,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: GPS Coordinates Loading...
 --- !u!222 &2052963004

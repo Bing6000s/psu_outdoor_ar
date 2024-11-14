@@ -13,6 +13,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
     [SerializeField] UnityEngine.UI.Image NavArrow;     // reference to NavArrow
     [SerializeField] Camera mainCamera;                 // Add a reference to the camera
     [SerializeField] GPSObjectPlacer gpsObjectPlacer;   // Reference to the GPSObjectPlacer script
+    [SerializeField] Vector2 inputVector;
 
     List<GameObject> targets = new List<GameObject>();
     List<GameObject> obstacles = new List<GameObject>();
@@ -28,6 +29,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
     Vector3 obstacleVec;
 
     GPS gps;                // reference to GPS script
+    UpdateCoordinate updateCoordinate;
 
     float adjustmentAngle;
     bool adjustingForObstacle;
@@ -51,6 +53,13 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
     {
         closest = Mathf.Infinity;
         closestObstacle = Mathf.Infinity;
+        
+        // GPS test
+        /*Vector2 playerVec2 = new Vector2(gps.latitude, gps.longitude);
+        Vector3 pos = GPSEncoder.GPSToUCS(playerVec2);
+        print("pos : " + pos);
+        print("GPS : " + GPSEncoder.USCToGPS(pos));
+        updateCoordinate.updateText(pos.x,pos.z,pos.y,0, pos);*/
 
         //place markers
         // PlaceMarker();
@@ -59,20 +68,28 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         initialDeviceHeading = gps.GetRelativeHeading();  // Capture the initial device heading
         StartCoroutine(WaitForMarkers());           // Gather all existing markers at the start
         previousPlayerVec = Vector3.zero;           // Initialize to zero for the first comparison
+        inputVector = new Vector2(gps.latitude, gps.longitude);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Updating..."); 
+        // GPS test
+        /*Vector3 pos = GPSEncoder.GPSToUCS(inputVector);
+        print("pos : " + pos);
+        print("GPS : " + GPSEncoder.USCToGPS(pos));
+        updateCoordinate.updateText(pos.x,pos.z,pos.y,0, pos);*/
+
         // Update maxMarkers based on the number of markers in GPSObjectPlacer
         maxMarkers = gpsObjectPlacer.markers.Count;
         adjustingForObstacle = false;
         adjustmentAngle = 0f;
 
         // Update player position using GPS coordinates
-        playerVec = gpsObjectPlacer.GPSLocationToWorld(gps.latitude, gps.longitude);
-
+        //playerVec = gpsObjectPlacer.GPSLocationToWorld(gps.latitude, gps.longitude,0f/*gps.altitude*/);
+        inputVector = new Vector2(gps.latitude, gps.longitude);
+        playerVec = GPSEncoder.GPSToUCS(inputVector);;
+        
         // Check if the player has moved significantly
         //if (Vector3.Distance(previousPlayerVec, playerVec) > movementThreshold)
         //{
@@ -81,7 +98,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
             previousPlayerVec = playerVec;
 
             // Remove markers if player is close enough
-            RemoveMarkersNearPlayer();
+            // RemoveMarkersNearPlayer();
 
             // finds targets
             FindClosestTarget();
@@ -93,7 +110,6 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         // Rotate the NavArrow to point towards the closest marker
         if (targets.Count > 0)
         {
-            Debug.Log("Rotating NavArrow...");
             RotateNavArrow();
         }
 
@@ -256,18 +272,20 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
 
         // Get the camera's forward direction projected onto the X-Z plane
         //! removed so the camera position no longer affects orientation
-        //Vector3 cameraForward = mainCamera.transform.forward;
-        //Vector2 cameraForward2D = new Vector2(cameraForward.x, cameraForward.z).normalized;
+        Vector3 cameraForward = mainCamera.transform.forward;
+        Vector2 cameraForward2D = new Vector2(cameraForward.x, cameraForward.z).normalized;
 
         // Calculate the relative direction from the target to relative heading (true north).
-        //float angleBetween = Vector2.SignedAngle(cameraForward2D, direction2D);
+        float angleBetween = Vector2.SignedAngle(cameraForward2D, direction2D);
 
         // Adjust the target angle based on the initial device heading to ensure consistent rotation
-        float targetAngle = Mathf.Atan2(targetDirection2D.y, targetDirection2D.x) * Mathf.Rad2Deg;
-        float adjustedAngle = targetAngle - (relativeHeading - initialDeviceHeading);
+        float targetAngle = Mathf.Atan2(direction2D.y, direction2D.x) * Mathf.Rad2Deg;
+        float adjustedAngle = targetAngle + angleBetween - (relativeHeading - initialDeviceHeading);
 
         // Get the current angle of the NavArrow around the Z axis
         float currentAngle = NavArrow.transform.eulerAngles.z;
+
+        //combine rotation relative to where camera is facing
 
         // Smoothly rotate the NavArrow around the Z axis based on the relative direction
         float rotationSpeed = 360f;

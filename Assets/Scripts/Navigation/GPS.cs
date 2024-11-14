@@ -9,8 +9,6 @@ public class GPS : MonoBehaviour
     public float longitude;
     public float altitude;
     public float waittime = 1;
-    [SerializeField] Camera mainCamera;                 // Add a reference to the camera
-
     private float initialHeading = 0f;  // Stores the initial compass heading
     private bool isInitialHeadingSet = false;
 
