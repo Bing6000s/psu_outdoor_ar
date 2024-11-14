@@ -109,11 +109,11 @@ public sealed class GPSEncoder {
 	    metersPerLon = (p1 * Mathf.Cos((float)lat)) + (p2 * Mathf.Cos(3 * (float)lat)) + (p3 * Mathf.Cos(5 * (float)lat));	   
 	}
 
-	private Vector3 ConvertGPStoUCS(Vector2 gps)  
+	private Vector3 ConvertGPStoUCS(Vector2 vec)  
 	{
 		FindMetersPerLat(_LatOrigin);
-		float zPosition  = metersPerLat * (gps.x - _LatOrigin); //Calc current lat
-		float xPosition  = metersPerLon * (gps.y - _LonOrigin); //Calc current lat
+		float zPosition  = metersPerLat * (vec.x - _LatOrigin); //Calc current lat
+		float xPosition  = metersPerLon * (vec.y - _LonOrigin); //Calc current lat
 		return new Vector3((float)xPosition, 0, (float)zPosition);
 	}
 	

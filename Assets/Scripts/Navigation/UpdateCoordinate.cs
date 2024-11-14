@@ -6,36 +6,30 @@ using UnityEngine.UI;
 public class UpdateCoordinate : MonoBehaviour
 {
     [SerializeField] Text coordinates;
-    private GPS gps;                    //reference GPS script
+    GPS gps;
 
-    /*void Start()
+    void Start()
     {
         gps = GPS.Instance;            // Initialize the GPS instance in Start
-    }*/
+    }
 
-    /*void Update()
+    void Update()
     {
         if (gps != null)
         {
             float latitude = gps.latitude;
             float longitude = gps.longitude;
-            float altitude = gps.altitude * 0;
-            //float distance = Distance.distance;
-            coordinates.text = $"Latitude: {latitude.ToString()}\n" +
-                               $"Longitude: {longitude.ToString()}\n" +
-                               $"Altitude: {altitude.ToString()} meters \n" +
-                               //$"Distance: {distance.ToString()} m";
-                               $"Distance: NOT_CALC";
-
-            Debug.Log($"Updating Coordinates: Lat: {latitude}, Lon: {longitude}, Alt: {altitude}");
+            float altitude = gps.altitude;
+            updateText(latitude, longitude, altitude, 0);
+            
         }
         else
         {
             coordinates.text = "Fetching GPS data...";
             Debug.LogWarning("GPS Instance not available!");
         }
-    }*/
-    public void updateText(float latitude, float longitude, float altitude, float distance, Vector3 pos)
+    }
+    public void updateText(float latitude, float longitude, float altitude, float distance)
     {
         string latSTR = latitude.ToString();
         string longSTR = longitude.ToString();
@@ -62,8 +56,7 @@ public class UpdateCoordinate : MonoBehaviour
         coordinates.text = $"Latitude: {latSTR}\n" +
                             $"Longitude: {longSTR}\n" +
                             $"Altitude: {altSTR} meters \n" +
-                            $"Distance: {disSTR}\n" + 
-                            $"pos : {pos}";
+                            $"Distance: {disSTR}\n";
 
         Debug.Log($"Updating Coordinates: Lat: {latitude}, Lon: {longitude}, Alt: {altitude}");
 

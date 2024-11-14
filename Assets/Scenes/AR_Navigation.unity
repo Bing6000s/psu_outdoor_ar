@@ -2732,15 +2732,15 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.01
-  far clip plane: 0.02
+  near clip plane: 0.1
+  far clip plane: 20
   field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 2147483647
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -3223,13 +3223,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 744f8fa862f713a4bad4c7a7999c73d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objToSpawn: {fileID: 4591669933845441009, guid: 7bb620b9a026d674395b43bd1f908047, type: 3}
-  obstacleMarker: {fileID: 7246997975359138464, guid: d9b7b8d87a090f440a114448d134e80e, type: 3}
-  canvas: {fileID: 778610219}
   NavArrow: {fileID: 1774627650}
   mainCamera: {fileID: 839196073}
   gpsObjectPlacer: {fileID: 1440421837}
-  inputVector: {x: 40.800587, y: -77.85742}
 --- !u!1 &1022524552
 GameObject:
   m_ObjectHideFlags: 0
@@ -4033,8 +4029,6 @@ MonoBehaviour:
   latitude: 0
   longitude: 0
   altitude: 0
-  waittime: 1
-  mainCamera: {fileID: 0}
 --- !u!4 &1229483998
 Transform:
   m_ObjectHideFlags: 0
@@ -5058,7 +5052,8 @@ MonoBehaviour:
   objToSpawn: {fileID: 4591669933845441009, guid: 7bb620b9a026d674395b43bd1f908047, type: 3}
   obstacleMarker: {fileID: 7246997975359138464, guid: d9b7b8d87a090f440a114448d134e80e, type: 3}
   gpsCoordinates:
-  - {x: 40.80151, y: -77.85716, z: 329.2}
+  - {x: 40.8009, y: -77.857216, z: 0}
+  inputVector: {x: 0, y: 0}
   markers: []
 --- !u!4 &1440421838
 Transform:
@@ -5090,8 +5085,6 @@ MonoBehaviour:
   latitude: 0
   longitude: 0
   altitude: 0
-  waittime: 1
-  mainCamera: {fileID: 839196073}
 --- !u!1 &1440860271
 GameObject:
   m_ObjectHideFlags: 0

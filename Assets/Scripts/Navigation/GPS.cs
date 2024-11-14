@@ -8,9 +8,9 @@ public class GPS : MonoBehaviour
     public float latitude;
     public float longitude;
     public float altitude;
-    public float waittime = 1;
     private float initialHeading = 0f;  // Stores the initial compass heading
     private bool isInitialHeadingSet = false;
+    UpdateCoordinate updateCoordinate;
 
     private void Awake()
     {
@@ -23,6 +23,7 @@ public class GPS : MonoBehaviour
         if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
         {
             Permission.RequestUserPermission(Permission.FineLocation);
+            Debug.Log("Permission given");
         }
 
         StartCoroutine(GetStartLocationService());
@@ -40,6 +41,7 @@ public class GPS : MonoBehaviour
         // Start the location service
         Input.compass.enabled = true;
         Input.location.Start();
+        Debug.Log("Compass set:" + Input.compass.enabled);
 
         // Wait until the location service initializes
         float maxWait = 20f;
@@ -67,6 +69,7 @@ public class GPS : MonoBehaviour
         latitude = Input.location.lastData.latitude;
         longitude = Input.location.lastData.longitude;
         altitude = Input.location.lastData.altitude;
+        Debug.Log("GPS data");
 
         // Capture the initial heading to use as the reference point
         StartCoroutine(CaptureInitialHeading());

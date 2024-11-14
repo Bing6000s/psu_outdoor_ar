@@ -6,15 +6,9 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
 {
     int maxMarkers = 3;
     int markerCount = 0;
-    [SerializeField] GameObject objToSpawn;             // prefab of the marker triangle
-    [SerializeField] GameObject obstacleMarker;         // prefab of the obstacle marker triangle
-    //[SerializeField] GameObject player;                 // reference to player
-    [SerializeField] Canvas canvas;                     // reference to canvas
     [SerializeField] UnityEngine.UI.Image NavArrow;     // reference to NavArrow
     [SerializeField] Camera mainCamera;                 // Add a reference to the camera
     [SerializeField] GPSObjectPlacer gpsObjectPlacer;   // Reference to the GPSObjectPlacer script
-    [SerializeField] Vector2 inputVector;
-
     List<GameObject> targets = new List<GameObject>();
     List<GameObject> obstacles = new List<GameObject>();
     float closest;
@@ -29,8 +23,6 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
     Vector3 obstacleVec;
 
     GPS gps;                // reference to GPS script
-    UpdateCoordinate updateCoordinate;
-
     float adjustmentAngle;
     bool adjustingForObstacle;
 
@@ -68,7 +60,8 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         initialDeviceHeading = gps.GetRelativeHeading();  // Capture the initial device heading
         StartCoroutine(WaitForMarkers());           // Gather all existing markers at the start
         previousPlayerVec = Vector3.zero;           // Initialize to zero for the first comparison
-        inputVector = new Vector2(gps.latitude, gps.longitude);
+        //inputVector = new Vector2(gps.latitude, gps.longitude);
+        //GPSEncoder.SetLocalOrigin(inputVector);
     }
 
     // Update is called once per frame
@@ -87,13 +80,12 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
 
         // Update player position using GPS coordinates
         //playerVec = gpsObjectPlacer.GPSLocationToWorld(gps.latitude, gps.longitude,0f/*gps.altitude*/);
-        inputVector = new Vector2(gps.latitude, gps.longitude);
-        playerVec = GPSEncoder.GPSToUCS(inputVector);;
+        playerVec = GPSEncoder.GPSToUCS(new Vector2(gps.latitude, gps.longitude));
         
         // Check if the player has moved significantly
         //if (Vector3.Distance(previousPlayerVec, playerVec) > movementThreshold)
         //{
-            Debug.Log("significant movement..."); 
+            // Debug.Log("significant movement..."); 
             // Only update if the movement is significant
             previousPlayerVec = playerVec;
 
@@ -115,34 +107,6 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
 
         //Debug that prints info about avoiding obstacle status
         //Debug.Log(adjustingForObstacle + ", Distance: " + closestObstacle.ToString() + ", Angle: " + adjustmentAngle);
-    }
-
-    public void AddMarker(Vector3 position, bool isObstacle = false)
-    {
-        // Determine which prefab to use based on the marker type
-        GameObject markerPrefab = isObstacle ? obstacleMarker : objToSpawn;
-        
-        if (markerPrefab == null)
-        {
-            Debug.LogError("Marker prefab not set in inspector!");
-            return;
-        }
-
-        // Instantiate the marker at the specified position
-        GameObject newMarker = Instantiate(markerPrefab, position, Quaternion.identity);
-        
-        // Add to the respective list
-        if (isObstacle)
-        {
-            obstacles.Add(newMarker);
-            newMarker.tag = "Obstacle"; // Set tag for identification
-        }
-        else
-        {
-            targets.Add(newMarker);
-            newMarker.tag = "Mark"; // Set tag for identification
-            markerCount++;
-        }
     }
 
     public void LoadData(GameData data)
@@ -225,7 +189,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         }
 
         //Debug that prints the closet target name
-        Debug.Log("target object" + closestTargetObj.name);
+        //Debug.Log("target object" + closestTargetObj.name);
     }
    void FindClosestObstacle()
     {
@@ -267,8 +231,11 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         // Get the relative heading from the GPS
         float relativeHeading = gps.GetRelativeHeading();
 
+        // direction from device to object
+        Vector3 targetDirection = playerVec - direction;
+
         // Project the direction vector onto the X-Z plane
-        Vector2 direction2D = new Vector2(direction.x, direction.z).normalized;
+        Vector2 direction2D = new Vector2(targetDirection.x, targetDirection.z).normalized;
 
         // Get the camera's forward direction projected onto the X-Z plane
         //! removed so the camera position no longer affects orientation
@@ -282,9 +249,6 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
         float targetAngle = Mathf.Atan2(direction2D.y, direction2D.x) * Mathf.Rad2Deg;
         float adjustedAngle = targetAngle + angleBetween - (relativeHeading - initialDeviceHeading);
 
-        // Get the current angle of the NavArrow around the Z axis
-        float currentAngle = NavArrow.transform.eulerAngles.z;
-
         //combine rotation relative to where camera is facing
 
         // Smoothly rotate the NavArrow around the Z axis based on the relative direction
@@ -292,7 +256,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
 
         // Adjust the angle based on the compass heading
         //float adjustedAngle = angleBetween - relativeHeading;
-        float newAngle = Mathf.MoveTowardsAngle(currentAngle, adjustedAngle - adjustmentAngle, rotationSpeed * Time.deltaTime);
+        float newAngle = Mathf.MoveTowardsAngle(NavArrow.transform.eulerAngles.z, adjustedAngle - adjustmentAngle, rotationSpeed * Time.deltaTime);
 
         // Apply the new angle to the NavArrow's rotation around the Z axis
         NavArrow.transform.rotation = Quaternion.Euler(0f, 0f, newAngle);

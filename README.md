@@ -122,7 +122,7 @@ updated Nav arrow to work and array of points. still need to test if objects pla
 - **GPS.cs**
 - **UpdateCoordinate.cs**  
 
-  5 hours spent making sure the GPS to world it right. it isn't
+  8 hours spent making sure the GPS to world it right. it isn't
 
   ### Created `GPSEncoder.cs`
   - **Linked** with `NavArrowMan` and `GPSObjectPlacer`:
@@ -131,8 +131,10 @@ updated Nav arrow to work and array of points. still need to test if objects pla
   ### Changes in `GPSObjectPlacer.cs`
 - **Updated** `PlaceObjectAtGPS()` method:
   - Converts GPS coordinates to Unity world position and places a marker at the corresponding location with new function.
+- **Set up** `PlaceObstacle()` method:
+  - Use GPS of detected object to place a point in Unity using `GPSEncoder.cs`
 
-- **replaced** `GPSLocationToWorld()` with `GPSEncoder` `GPSToUCS()` method:
+- **replaced** `GPSLocationToWorld()` with `GPSEncoder.cs` `GPSToUCS()` method:
   - current conversion failed to accuracy place points. Created new script and methods to be more precise. 
 
   ### Changes in `UpdateCoordinate.cs`
