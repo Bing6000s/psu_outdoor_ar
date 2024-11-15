@@ -745,15 +745,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9ec6a8fc6925acb4abc5500eeecb8270, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2959.7227
+      value: 47.71
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9ec6a8fc6925acb4abc5500eeecb8270, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.41
+      value: 1.92
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9ec6a8fc6925acb4abc5500eeecb8270, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1069.0948
+      value: 107.58
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9ec6a8fc6925acb4abc5500eeecb8270, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1007,9 +1007,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _altitudeOffset: NaN
-  _latitude: 40.80079788570954
-  _longitude: -77.85704747623285
-  _altitude: 321.8377487100661
+  _latitude: 40.81145843419677
+  _longitude: -77.89195262809113
+  _altitude: 328.1411522133276
   _altitudeType: 0
   _useEditorAltitudeOverride: 0
   _editorAltitudeOverride: 0
@@ -2505,9 +2505,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _altitudeOffset: NaN
-  _latitude: 40.80079799000015
-  _longitude: -77.85735896384278
-  _altitude: 321.3655140781775
+  _latitude: 40.81139866925281
+  _longitude: -77.8918645741997
+  _altitude: 327.9210875630379
   _altitudeType: 0
   _useEditorAltitudeOverride: 0
   _editorAltitudeOverride: 0
@@ -4968,15 +4968,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 14df923b9101bb14abca861595b99a5f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2986.01
+      value: 40.280075
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 14df923b9101bb14abca861595b99a5f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.95
+      value: 2.14
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 14df923b9101bb14abca861595b99a5f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1069.096
+      value: 114.21722
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 14df923b9101bb14abca861595b99a5f, type: 3}
       propertyPath: m_LocalRotation.w
