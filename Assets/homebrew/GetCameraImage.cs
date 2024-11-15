@@ -5,15 +5,6 @@ using UnityEngine.UI;
 
 public class GetCameraImage : MonoBehaviour
 {
-    // Notes for later
-    // https://answers.unity.com/questions/730857/webcamtexture-on-a-spriterenderer.html
-    // https://www.youtube.com/watch?v=4vIpNRJHZCQ
-    // https://forum.unity.com/threads/webcamtexture-texture2d.154057/ Reply #13
-    // https://docs.unity3d.com/ScriptReference/WebCamTexture.html
-    // https://docs.unity3d.com/ScriptReference/Transform.Rotate.html
-
-    // For image gabbing:
-    // https://learn.microsoft.com/en-us/windows/mixed-reality/develop/unity/locatable-camera-in-unity
     public MeshRenderer outputMesh;
     public Image outputImage;
 
@@ -21,42 +12,60 @@ public class GetCameraImage : MonoBehaviour
     private WebCamDevice[] devices;
     private WebCamTexture webCamTexture;
 
-    // Start is called before the first frame update
     void Start()
     {
+        InitializeCamera();
+    }
 
-        // https://docs.unity3d.com/ScriptReference/WebCamTexture-deviceName.html
-
+    private void InitializeCamera()
+    {
         devices = WebCamTexture.devices;
-        webCamTexture = new WebCamTexture();
 
         if (devices.Length > 0)
         {
-            // 
-            webCamTexture.deviceName = devices[camNum].name;
-            outputImage.material.mainTexture = webCamTexture;
-            webCamTexture.Play();
+            if (webCamTexture == null || !webCamTexture.isPlaying)
+            {
+                webCamTexture = new WebCamTexture(devices[camNum].name);
+                outputImage.material.mainTexture = webCamTexture;
+                webCamTexture.Play();
+            }
         }
         else
         {
-            // Connect a camera screen
+            Debug.LogError("No camera devices found.");
         }
     }
 
+    void OnEnable()
+    {
+        if (webCamTexture == null)
+        {
+            InitializeCamera();
+        }
+        else if (!webCamTexture.isPlaying)
+        {
+            webCamTexture.Play();
+        }
+    }
+
+    void OnDisable()
+    {
+        webCamTexture.Stop();
+        webCamTexture = null;
+    }
+    void OnApplicationQuit()
+    {
+        webCamTexture.Stop();
+        webCamTexture = null;
+    }
     public void cycleCamera()
     {
-        Debug.Log("camNum: " + camNum);
-        Debug.Log("devices.Length: " + devices.Length);
-        if (camNum + 1 == devices.Length)
+        if (devices.Length > 0)
         {
-            camNum = 0;
+            webCamTexture.Stop();
+            camNum = (camNum + 1) % devices.Length;
+            webCamTexture.deviceName = devices[camNum].name;
+            webCamTexture.Play();
         }
-        else
-        {
-            camNum++;
-        }
-        webCamTexture.Stop();
-        webCamTexture.deviceName = devices[camNum].name;
-        webCamTexture.Play();
     }
 }
