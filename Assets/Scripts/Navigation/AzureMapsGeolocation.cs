@@ -3,27 +3,34 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq; // Add this for JSON handling
+using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 public class AzureMapsGeocodingExample
 {
-    // Class to store the geolocation results
     public class GeolocationResult
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
     }
 
-    // Method to get geolocation data from Azure Maps API
     public static async Task<GeolocationResult> GetGeolocation(string apiKey, string query)
     {
+        double latitude = GPS.Instance.latitude;
+        double longitude = GPS.Instance.longitude;
+        if (GPS.Instance.latitude == 0 && GPS.Instance.longitude == 0)
+        {
+            latitude = 40.810987;
+            longitude = -77.892420;
+        }
 
-        double latitude = GPS.Instance.latitude == 0 ? 40.810987 : GPS.Instance.latitude;
-        double longitude = GPS.Instance.longitude == 0 ? -77.892420 : GPS.Instance.longitude;
 
+        string lat = latitude.ToString();
+        string lon = longitude.ToString();
+        string limit = "1";
+        string radius = "3000";
         // Construct base URL
-        string url = $"https://atlas.microsoft.com/search/fuzzy/json?lat={latitude}&lon={longitude}";
-
+        string url = $"https://atlas.microsoft.com/search/fuzzy/json?";
         using (HttpClient client = new HttpClient())
         {
             // Build query parameters
@@ -32,7 +39,11 @@ public class AzureMapsGeocodingExample
                 { "api-version", "1.0" },
                 { "subscription-key", apiKey },
                 { "query", query },
-                { "limit", "1" }
+                { "lat", lat },
+                { "lon", lon },
+                {"limit", limit },
+                { "radius", radius } // Changed "Radius" to "radius"
+
             };
 
             // Add query parameters to the URL
@@ -50,9 +61,9 @@ public class AzureMapsGeocodingExample
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
 
-                    // Parse the JSON response using Newtonsoft.Json
+                    // Parse the JSON response
                     JObject json = JObject.Parse(jsonResponse);
-                    
+
                     if (json["results"] != null && json["results"].HasValues)
                     {
                         var position = json["results"][0]["position"];
@@ -64,7 +75,8 @@ public class AzureMapsGeocodingExample
                     }
                     else
                     {
-                        return null; // No results found
+                        Console.WriteLine("No results found.");
+                        return null;
                     }
                 }
                 else
