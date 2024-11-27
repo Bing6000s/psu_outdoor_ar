@@ -140,3 +140,16 @@ updated Nav arrow to work and array of points. still need to test if objects pla
   ### Changes in `UpdateCoordinate.cs`
   - **Updated** `updateText` method:
     - When called the display text will be updated.
+
+## 11/27/24
+## Files modified:
+- **NavigationManager.cs**
+- **LocationManager.cs**
+- **GetCameraImage.cs**
+
+  Ethan's log: I decided to make sure that the camera and scene switching would actually be fixed this time. Thankfully it is working.
+  The camera now switches on and off appropriately depending on whether the user is in the AR_Navigation scene.
+  The scene switching from AR_Navigation to SavedLocations has been fixed.
+  
+  Reformatting the text displayed in each stored location has been implemented. Now it displays the search query, with the given 
+  latitude and longitude respectively.

@@ -40,9 +40,9 @@ public class NavigationManager : MonoBehaviour
         {
             GameObject item = Instantiate(locationItemPrefab, locationsContainer);
             item.GetComponentInChildren<Text>().text = location;
-            
+
             Button button = item.GetComponent<Button>();
-            if(button != null)
+            if (button != null)
             {
                 button.onClick.AddListener(() => OnLocationSelected(location));
             }
@@ -54,22 +54,51 @@ public class NavigationManager : MonoBehaviour
         // Handle the logic when a location is selected
         Debug.Log("Selected Location: " + location);
 
-        // Split the location string and parse the lat and lon
-        string[] coordinates = location.Split(':');
-        if (coordinates.Length >= 2)
+        if (string.IsNullOrEmpty(location))
         {
-            float lat = float.Parse(coordinates[2].Split(',')[0]);
-            float lon = float.Parse(coordinates[3]);
-
-            // Set the targetLocation for the ArrowDirection
-            arrowDirectionScript.SetTargetLocation(new Vector2(lat, lon));
+            Debug.LogError("Location string is empty or null.");
+            return;
         }
 
-        // Hide the navigation panel
+        // Split the string into lines
+        string[] lines = location.Split('\n');
+        if (lines.Length < 2)
+        {
+            Debug.LogError("Invalid location string format. Expected two lines.");
+            return;
+        }
+
+        // Parse the second line for latitude and longitude
+        string coordinatesLine = lines[1];
+
+        // Example: "Latitude: 40.79494, Longitude: -77.866942"
+        string[] parts = coordinatesLine.Split(',');
+        if (parts.Length < 2)
+        {
+            Debug.LogError("Invalid coordinates format in location string.");
+            return;
+        }
+
+        // Extract and parse latitude
+        string latitudePart = parts[0].Trim(); // "Latitude: 40.79494"
+        float latitude = float.Parse(latitudePart.Split(':')[1].Trim());
+
+        // Extract and parse longitude
+        string longitudePart = parts[1].Trim(); // "Longitude: -77.866942"
+        float longitude = float.Parse(longitudePart.Split(':')[1].Trim());
+
+        // Set the target location for the ArrowDirection script
+        /* 
+        Note from Ethan: This will need to get replaced. Clicking an location should be able to display 
+        all of the points within the scroll view and act as if the application is still performing the same way it would 
+        receive input from the main search bar.
+        */
+        arrowDirectionScript.SetTargetLocation(new Vector2(latitude, longitude));
+
+        // Hide the navigation panel and enable AR session
         navigationPanel.SetActive(false);
-        
-        // Start the AR Session to display the camera feed
         arSession.enabled = true;
+        SceneManager.LoadScene("AR_Navigation");
     }
 
     public void ReturnToMainMenu()
@@ -81,7 +110,7 @@ public class NavigationManager : MonoBehaviour
 
     public void ReturnToObjectRecognition()
     {
-        arSession.enabled = false; 
+        arSession.enabled = false;
         SceneManager.LoadScene("AR_Navigation");
     }
 }

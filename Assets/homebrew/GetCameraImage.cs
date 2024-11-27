@@ -48,16 +48,23 @@ public class GetCameraImage : MonoBehaviour
         }
     }
 
-    void OnDisable()
+void OnDisable()
+{
+    if (webCamTexture != null)
     {
         webCamTexture.Stop();
         webCamTexture = null;
     }
-    void OnApplicationQuit()
+}
+
+void OnApplicationQuit()
+{
+    if (webCamTexture != null)
     {
         webCamTexture.Stop();
         webCamTexture = null;
     }
+}
     public void cycleCamera()
     {
         if (devices.Length > 0)

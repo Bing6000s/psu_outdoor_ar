@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 public class LocationManager : MonoBehaviour
 {
@@ -20,8 +21,8 @@ public class LocationManager : MonoBehaviour
     public Button clearLocationsButton;
     public Button navigationButton;
 
-    public List<string> storedLocations = new List<string>(); // Lists to store the coordinates
-
+    public List<string> storedLocations = new List<string>();
+    public Dictionary<string, string> storedLocationsDictionary = new Dictionary<string, string>();
     private void Start()
     {
         locationPanelCanvasGroup = locationPanel.GetComponent<CanvasGroup>();
@@ -63,17 +64,26 @@ public class LocationManager : MonoBehaviour
         locationPanelCanvasGroup.blocksRaycasts = false;
     }
 
-    public void OnStoreLocationButtonClicked()
+    public async void OnStoreLocationButtonClicked()
     {
+        // Grab the input from the user
         string locationName = locationNameInputField.text;
         if (string.IsNullOrEmpty(locationName))
         {
-            Debug.LogError("Please provide a name for the location.");
+            Debug.LogError("String is empty.");
             return;
         }
-
-        string newLocation = locationName + ": Lat:" + GPS.Instance.latitude + ", Lon:" + GPS.Instance.longitude;
-        storedLocations.Add(newLocation);
+        // Construct string to add location and send towards API for coordinate parsing
+        string newLocation = locationName;
+        string locationResult = await GetGeolocationAsStoredString(newLocation);
+        if (string.IsNullOrEmpty(locationResult))
+        {
+            Debug.LogError("Error. Given location is either too far/does not exist.");
+            return;
+        }
+        storedLocationsDictionary[newLocation] = locationResult;
+        storedLocations.Add(newLocation + "\n" + locationResult);
+        
 
         // Save the location
         SaveStoredLocations();
@@ -88,15 +98,16 @@ public class LocationManager : MonoBehaviour
 
     public void OnNavigationButtonClicked()
     {
-        SceneManager.LoadScene("Navigation");
+        SceneManager.LoadScene("SavedLocations");
     }
 
     public void OnClearLocationsButtonClicked()
     {
         // Remove the specific key for stored locations
         PlayerPrefs.DeleteKey("storedLocations");
-        
-        // Clear the list in memory
+
+        // Clear the list and dictionary in memory
+        storedLocationsDictionary.Clear();
         storedLocations.Clear();
 
         // Optionally, you can give feedback to the user
@@ -121,6 +132,24 @@ public class LocationManager : MonoBehaviour
         if (!string.IsNullOrEmpty(savedLocations))
         {
             storedLocations = new List<string>(savedLocations.Split(';'));
+        }
+    }
+
+    public async Task<string> GetGeolocationAsStoredString(string address)
+    {
+        // Call the GetGeolocation method from AzureMapsGeocodingExample
+        AzureMapsGeocodingExample.GeolocationResult geolocationResult = await AzureMapsGeocodingExample.GetGeolocation("28wliaKNAA7BkAk9JsOalLkkR81nyYHK9vgSd7Fd7zaPnLL7zjDVJQQJ99AIACYeBjFL5h9IAAAgAZMPD6O2", address);
+
+        if (geolocationResult != null)
+        {
+            string result = $"Latitude: {geolocationResult.Latitude}, Longitude: {geolocationResult.Longitude}";
+            Debug.Log("Search bar: Geolocation Result: " + result);
+            return result;
+        }
+        else
+        {
+            Debug.LogError("Search bar: Failed to get geolocation for the entered address.");
+            return null;
         }
     }
 }

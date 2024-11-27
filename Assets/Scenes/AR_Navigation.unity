@@ -5530,9 +5530,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1127298726}
+      - m_Target: {fileID: 1127298727}
         m_TargetAssemblyTypeName: NavigationController, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: NavigationButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
