@@ -1,6 +1,16 @@
 {
-  "scopedRegistries": [],
+  "scopedRegistries": [
+    {
+      "name": "Cesium",
+      "url": "https://unity.pkg.cesium.com",
+      "scopes": [
+        "com.cesium.unity"
+      ]
+    }
+  ],
   "dependencies": {
+    "com.cesium.unity": "1.13.1",
+    "com.google.ar.core.arfoundation.extensions": "file:E:/Unity/SDKs/arcore-unity-extensions-main",
     "com.unity.adaptiveperformance.samsung.android": "5.0.0",
     "com.unity.barracuda": "3.0.0",
     "com.unity.collab-proxy": "2.0.3",
