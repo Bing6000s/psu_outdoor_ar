@@ -68,6 +68,7 @@ public class LocationManager : MonoBehaviour
     {
         // Grab the input from the user
         string locationName = locationNameInputField.text;
+        locationNameInputField.text = "";
         if (string.IsNullOrEmpty(locationName))
         {
             Debug.LogError("String is empty.");
@@ -81,12 +82,19 @@ public class LocationManager : MonoBehaviour
             Debug.LogError("Error. Given location is either too far/does not exist.");
             return;
         }
-        storedLocationsDictionary[newLocation] = locationResult;
-        storedLocations.Add(newLocation + "\n" + locationResult);
-        
 
-        // Save the location
-        SaveStoredLocations();
+        if (!storedLocationsDictionary.ContainsKey(newLocation))
+        {
+            storedLocationsDictionary[newLocation] = locationResult;
+            storedLocations.Add(newLocation + "\n" + locationResult);
+
+            // Save the location
+            SaveStoredLocations();
+        }
+        else
+        {
+            Debug.LogWarning("Location already exists in the list.");
+        }
     }
 
     public void OnViewLocationButtonClicked()
@@ -111,12 +119,13 @@ public class LocationManager : MonoBehaviour
         storedLocations.Clear();
 
         // Optionally, you can give feedback to the user
+        viewLocationsText.text = "All stored locations have been cleared.";
         Debug.Log("Stored locations cleared!");
     }
 
     private IEnumerator HideViewLocationPanelAfterDelay()
     {
-        yield return new WaitForSeconds(6);
+        yield return new WaitForSeconds(3);
         viewLocationsPanel.SetActive(false);
     }
 
@@ -131,14 +140,30 @@ public class LocationManager : MonoBehaviour
         string savedLocations = PlayerPrefs.GetString("storedLocations", "");
         if (!string.IsNullOrEmpty(savedLocations))
         {
-            storedLocations = new List<string>(savedLocations.Split(';'));
+            var loadedLocations = savedLocations.Split(';');
+            foreach (var location in loadedLocations)
+            {
+                // Avoid adding duplicates
+                if (!storedLocations.Contains(location))
+                {
+                    storedLocations.Add(location);
+
+                    // Split and reconstruct the dictionary
+                    var lines = location.Split('\n');
+                    if (lines.Length == 2)
+                    {
+                        storedLocationsDictionary[lines[0]] = lines[1];
+                    }
+                }
+            }
         }
     }
 
     public async Task<string> GetGeolocationAsStoredString(string address)
     {
         // Call the GetGeolocation method from AzureMapsGeocodingExample
-        AzureMapsGeocodingExample.GeolocationResult geolocationResult = await AzureMapsGeocodingExample.GetGeolocation("28wliaKNAA7BkAk9JsOalLkkR81nyYHK9vgSd7Fd7zaPnLL7zjDVJQQJ99AIACYeBjFL5h9IAAAgAZMPD6O2", address);
+        AzureMapsGeocodingExample.GeolocationResult geolocationResult = await AzureMapsGeocodingExample.GetGeolocation(
+            "28wliaKNAA7BkAk9JsOalLkkR81nyYHK9vgSd7Fd7zaPnLL7zjDVJQQJ99AIACYeBjFL5h9IAAAgAZMPD6O2", address);
 
         if (geolocationResult != null)
         {
