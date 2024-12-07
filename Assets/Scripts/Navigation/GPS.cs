@@ -34,14 +34,14 @@ public class GPS : MonoBehaviour
         // Check if the user has location service enabled.
         if (!Input.location.isEnabledByUser)
         {
-            Debug.Log("Location not enabled on device or app does not have permission to access location");
+            Debug.LogWarning("Location not enabled on device or app does not have permission to access location");
             yield break;
         }
 
         // Start the location service
         Input.compass.enabled = true;
         Input.location.Start();
-        Debug.Log("Compass set:" + Input.compass.enabled);
+        //Debug.Log("Compass set:" + Input.compass.enabled);
 
         // Wait until the location service initializes
         float maxWait = 20f;
@@ -54,7 +54,7 @@ public class GPS : MonoBehaviour
         // If the service didn't initialize in 20 seconds this cancels location service use.
         if (maxWait <= 0)
         {
-            Debug.Log("Timed out");
+            Debug.LogError("Timed out");
             yield break;
         }
 
@@ -69,7 +69,7 @@ public class GPS : MonoBehaviour
         latitude = Input.location.lastData.latitude;
         longitude = Input.location.lastData.longitude;
         altitude = Input.location.lastData.altitude;
-        Debug.Log("GPS data");
+        //Debug.Log("GPS data");
 
         // Capture the initial heading to use as the reference point
         StartCoroutine(CaptureInitialHeading());
@@ -84,7 +84,7 @@ public class GPS : MonoBehaviour
         {
             initialHeading = Input.compass.trueHeading;
             isInitialHeadingSet = true;
-            Debug.Log("Captured initial heading: " + initialHeading);
+            //Debug.Log("Captured initial heading: " + initialHeading);
         }
     }
 

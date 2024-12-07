@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1141456466236529137}
   - component: {fileID: 2459667036157961494}
   - component: {fileID: 479787759902169881}
+  - component: {fileID: 1445721825087025114}
   m_Layer: 0
   m_Name: NavPoint
   m_TagString: Mark
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4591669933845441009}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -158.10779, y: 314.4159, z: 696.93823}
+  m_LocalPosition: {x: -158.1, y: -0.040120475, z: 696.9038}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -97,3 +98,24 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1445721825087025114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4591669933845441009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b3d0e3f52dfe4243aceaba16f9cd0c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _altitudeOffset: NaN
+  _latitude: 40.80810499043748
+  _longitude: -77.85849360359919
+  _altitude: 312
+  _altitudeType: 1
+  _useEditorAltitudeOverride: 0
+  _editorAltitudeOverride: 0
+  _anchorManager: {fileID: 0}
+  Origin: {fileID: 0}

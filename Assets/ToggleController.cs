@@ -20,7 +20,8 @@ public class ToggleController : MonoBehaviour
     private bool showLabels;
 
     // Unity start
-    void Start(){
+    void Start()
+    {
         // Get object components
         detector = detectorObj.GetComponent<Yolo3Detection>();
         classifier = classifierObj.GetComponent<ImageClassification>();
@@ -34,7 +35,8 @@ public class ToggleController : MonoBehaviour
     }
 
     // Unity time step
-    void Update(){
+    void Update()
+    {
         // Check for spacebar to toggle Added To Button
         // if (Input.GetKeyDown("space"))
         // {
@@ -43,8 +45,10 @@ public class ToggleController : MonoBehaviour
     }
 
     // Function to switch between the classfn and detection modes
-    public void ToggleMode() {
-        if(isDetecting){
+    public void ToggleMode()
+    {
+        if (isDetecting)
+        {
             // Disable detection and activate classfn
             detector.ClearBoxes();
             detectorObj.SetActive(false);
@@ -52,7 +56,8 @@ public class ToggleController : MonoBehaviour
             classifier.ResetRunning();
             classifier.ClearBoxes();
         }
-        else{
+        else
+        {
             // Disable classfn and enable detection
             classifier.ClearBoxes();
             classifierObj.SetActive(false);
@@ -63,32 +68,55 @@ public class ToggleController : MonoBehaviour
         isDetecting = !isDetecting;
     }
 
-    public void ToggleDebug() {
-        if (isDebug) {
+    public void ToggleDebug()
+    {
+        if (isDebug)
+        {
             debugCounter.SetActive(false);
-        } else {
+        }
+        else
+        {
             debugCounter.SetActive(true);
         }
         isDebug = !isDebug;
     }
 
-    public void RotateCamera() {
+    public void RotateCamera()
+    {
         webCamPicture.transform.Rotate(180.0f, 0.0f, 0.0f, Space.World);
     }
 
-    public void toggleLabels() {
-        if (showLabels) {
+    public void toggleLabels()
+    {
+        if (showLabels)
+        {
             labelButtons.transform.position = labelButtons.transform.position + (new Vector3(1000, 0, 0));
-        } else {
+        }
+        else
+        {
             labelButtons.transform.position = labelButtons.transform.position + (new Vector3(-1000, 0, 0));
         }
         showLabels = !showLabels;
     }
 
-    public void shutdown() {
-        //Application.Quit();
-        SceneManager.LoadScene("MainMenu");
-        //webCamPicture.SetActive(false);
+    public void shutdown()
+    {
+        // if (classifier != null)
+        // {
+        //     classifier.ClearBoxes();  
+        //     classifier.ReleaseResources();  // Add a method in ImageClassification to release resources
+        // }
 
+        // Destroy instantiated objects if no longer needed
+        Destroy(detectorObj);
+        Destroy(classifierObj);
+        Destroy(debugCounter);
+        Destroy(webCamPicture);
+        Destroy(labelButtons);
+
+        // unload unused assets to free up memory
+        Resources.UnloadUnusedAssets();
+        System.GC.Collect();
+        SceneManager.LoadScene("MainMenu");
     }
 }

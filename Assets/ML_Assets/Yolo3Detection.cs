@@ -472,4 +472,40 @@ public class Yolo3Detection : MonoBehaviour
         }
         return results;
     }
+    public void ReleaseResources()
+    {
+        // Release the Barracuda worker
+        if (worker != null)
+        {
+            worker.Dispose();
+            worker = null;
+        }
+
+        // Clear and destroy all bounding box GameObjects
+        if (boxes != null)
+        {
+            foreach (GameObject box in boxes)
+            {
+                if (box != null)
+                {
+                    Destroy(box);
+                }
+            }
+            boxes.Clear();
+        }
+
+        // Optional: Clear other references
+        labels = null;
+        thisPreprocessor = null;
+
+        // Optionally unload unused assets to free memory
+        Resources.UnloadUnusedAssets();
+        System.GC.Collect(); // Trigger garbage collection
+    }
+
+    // Ensure ReleaseResources is called when this object is destroyed
+    private void OnDestroy()
+    {
+        ReleaseResources();
+    }
 }

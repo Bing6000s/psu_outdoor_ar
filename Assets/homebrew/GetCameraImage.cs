@@ -5,54 +5,76 @@ using UnityEngine.UI;
 
 public class GetCameraImage : MonoBehaviour
 {
-    // Notes for later
-    // https://answers.unity.com/questions/730857/webcamtexture-on-a-spriterenderer.html
-    // https://www.youtube.com/watch?v=4vIpNRJHZCQ
-    // https://forum.unity.com/threads/webcamtexture-texture2d.154057/ Reply #13
-    // https://docs.unity3d.com/ScriptReference/WebCamTexture.html
-    // https://docs.unity3d.com/ScriptReference/Transform.Rotate.html
-
-    // For image gabbing:
-    // https://learn.microsoft.com/en-us/windows/mixed-reality/develop/unity/locatable-camera-in-unity
     public MeshRenderer outputMesh;
     public Image outputImage;
 
-    public int camNum = 0;
-    public WebCamDevice[] devices;
-    public WebCamTexture webCamTexture;
+    private int camNum = 0;
+    private WebCamDevice[] devices;
+    private WebCamTexture webCamTexture;
 
-    // Start is called before the first frame update
     void Start()
     {
+        InitializeCamera();
+    }
 
-        // https://docs.unity3d.com/ScriptReference/WebCamTexture-deviceName.html
-
+    private void InitializeCamera()
+    {
         devices = WebCamTexture.devices;
-        webCamTexture = new WebCamTexture();
 
         if (devices.Length > 0)
         {
-            // 
-            webCamTexture.deviceName = devices[0].name;
-            outputImage.material.mainTexture = webCamTexture;
-            webCamTexture.Play();
-        } else {
-            // Connect a camera screen
-            Debug.Log("No Camera Found");
+            if (webCamTexture == null || !webCamTexture.isPlaying)
+            {
+                webCamTexture = new WebCamTexture(devices[camNum].name);
+                outputImage.material.mainTexture = webCamTexture;
+                webCamTexture.Play();
+            }
+        }
+        else
+        {
+            Debug.LogError("No camera devices found.");
         }
     }
 
-    public void cycleCamera() {
-        Debug.Log("camNum: " + camNum);
-        Debug.Log("devices.Length: " + devices.Length);
-        if (camNum +1 == devices.Length) 
-        {  
-            camNum = 0;
-        } else {
-            camNum++;
+    void OnEnable()
+    {
+        if (webCamTexture == null)
+        {
+            InitializeCamera();
         }
+        else if (!webCamTexture.isPlaying)
+        {
+            webCamTexture.Play();
+        }
+    }
+
+void OnDisable()
+{
+    if (webCamTexture != null)
+    {
         webCamTexture.Stop();
-        webCamTexture.deviceName = devices[camNum].name;
-        webCamTexture.Play();
+        Destroy(webCamTexture);
+        webCamTexture = null;
+    }
+}
+
+void OnApplicationQuit()
+{
+    if (webCamTexture != null)
+    {
+        webCamTexture.Stop();
+        Destroy(webCamTexture);
+        webCamTexture = null;
+    }
+}
+    public void cycleCamera()
+    {
+        if (devices.Length > 1)
+        {
+            webCamTexture.Stop();
+            camNum = (camNum + 1) % devices.Length;
+            webCamTexture.deviceName = devices[camNum].name;
+            webCamTexture.Play();
+        }
     }
 }

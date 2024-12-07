@@ -140,3 +140,21 @@ updated Nav arrow to work and array of points. still need to test if objects pla
   ### Changes in `UpdateCoordinate.cs`
   - **Updated** `updateText` method:
     - When called the display text will be updated.
+
+## 11/29/24
+### Changes to build settings
+  - API level from 7.0 (API level 24) to 9.0 (API level 28)
+  - ARMv7 was disabled and ARM64 was enable
+  - Google Console Account needed
+
+12/6/24
+3 hours of work
+Cesium set up
+Geospatial set up
+mini world made but only part is shown
+Archors on Marks
+12/7/24
+2 hours of work
+Issues with Marks appearing under the model of the area
+  - API level from 9.0 (API level 28) to 7.0 (API level 24)
+  - ARMv7 and ARM64 was enable

@@ -67,6 +67,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
     // Update is called once per frame
     void Update()
     {
+        StartCoroutine(WaitForMarkers());           // Gather all existing markers
         // GPS test
         /*Vector3 pos = GPSEncoder.GPSToUCS(inputVector);
         print("pos : " + pos);

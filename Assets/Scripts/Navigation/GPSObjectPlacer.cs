@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Google.XR.ARCoreExtensions; // For ARCore Geospatial APIs
+using CesiumForUnity; // For Cesium Georeferencing (if needed)
+using CesiumForUnity;
+
 
 public class GPSObjectPlacer : MonoBehaviour
 {
-    [SerializeField] GameObject objToSpawn;                         // prefab of the marker triangle
-    [SerializeField] GameObject obstacleMarker;                     // prefab of the obstacle marker triangle
+    //public ARGeospatialAnchorManager arAnchorManager; // ARCore Anchor Manager
+    public CesiumGeoreference cesiumGeoreference;                   // Cesium Georeference component
+    public Transform PollockArea;                                   // Cesium Sub Scene
+    [SerializeField] GameObject objToSpawn;                         // prefab of the marker
+    [SerializeField] GameObject obstacleMarker;                     // prefab of the obstacle marker
 
     [SerializeField] List<Vector3> gpsCoordinates;                  // List of latitude and longitude pairs
     [SerializeField] Vector2 inputVector;
     public List<GameObject> markers = new List<GameObject>();       // List of placed markers
 
     GPS gps;                                                        //reference to Arrow Manger
-    int maxObjects = 2;
+    int maxObjects = 1;
     int count;
 
     void Start()
@@ -20,7 +27,7 @@ public class GPSObjectPlacer : MonoBehaviour
         gps = GPS.Instance;
         //Vector3 temp = GPSLocationToWorld(gps.latitude,gps.longitude,0f/*gps.altitude*/);
         inputVector = new Vector2(gps.latitude,gps.longitude);
-        PlaceObjectAtGPS(inputVector.x,inputVector.y,0f);
+        //PlaceObjectAtGPS(inputVector.x,inputVector.y,0f);
 
     }
 
@@ -40,12 +47,28 @@ public class GPSObjectPlacer : MonoBehaviour
     // Method to place an object at a given GPS latitude and longitude
     void PlaceObjectAtGPS(float latitude, float longitude, float altitude)
     {
-        // Convert GPS coordinates to Unity world coordinates
-        Vector3 worldPosition = GPSEncoder.GPSToUCS(new Vector2(latitude,longitude));
+        // Instantiate the object and add CesiumGlobeAnchor for geospatial placement
+        GameObject newMarker = Instantiate(objToSpawn,new Vector3(latitude,altitude,longitude),Quaternion.identity, PollockArea);
+        CesiumGlobeAnchor globeAnchor = newMarker.AddComponent<CesiumGlobeAnchor>();
 
-        // Add a new target marker
+        // Convert GPS coordinates to Unity world coordinates
+        //Vector3 worldPosition = GPSEncoder.GPSToUCS(new Vector2(latitude,longitude));
+        
+        // Add or get the CesiumGlobeAnchor component
+        //CesiumGlobeAnchor globeAnchor = instance.GetComponent<CesiumGlobeAnchor>();
+        if (globeAnchor == null)
+        {
+            //globeAnchor = instance.AddComponent<CesiumGlobeAnchor>();
+        }
+
+        // Set the geospatial coordinates
+        globeAnchor.latitude = latitude;
+        globeAnchor.longitude = longitude;
+        globeAnchor.height = 312;
+
+        // Add the marker to the list and increment the counter
+        markers.Add(newMarker);
         count++;
-        PlaceMarker(worldPosition);
     }
 
     void PlaceMarker(Vector3 position)
