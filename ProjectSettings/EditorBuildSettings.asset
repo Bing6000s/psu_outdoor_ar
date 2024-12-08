@@ -8,25 +8,25 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/MainMenu.unity
     guid: 510ea69f117b1a948955367c8192b2af
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/AR_Navigation.unity
     guid: 3fc8acdd13e6c734bafef6554d6fdbcd
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/SavedLocations.unity
     guid: 7b9e928730454a846abf64ea03b13af0
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/MyImages.unity
     guid: 6ec1b3ded410dcf488e606638a4156dc
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Settings.unity
     guid: 67e35ba6eb9c68a4d876af635913a230
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/CurrentObjects.unity
     guid: 2abcd8a26b645e4499e510d1bf3271fb
-  - enabled: 1
+  - enabled: 0
     path: Assets/Samples/ARCore Extensions/1.46.0/Geospatial Sample/Scenes/GeospatialArf4.unity
     guid: 1ed15e9657253406185e4b2c7c5a4fc4
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/UploadScreen.unity
     guid: d71a3e0bf2041b641ac82d4f5026adbc
   m_configObjects:
