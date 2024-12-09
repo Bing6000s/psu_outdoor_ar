@@ -20,7 +20,7 @@ public class GPSObjectPlacer : MonoBehaviour
 
     GPS gps;                                                        //reference to Arrow Manger
     int maxObjects = 1;
-    int count;
+    int count = 0;
 
     void Start()
     {
@@ -37,9 +37,9 @@ public class GPSObjectPlacer : MonoBehaviour
         // Iterate through the GPS coordinates list and place objects at each location
         foreach (Vector3 gpsCoord in gpsCoordinates)
         {
-            if(count != maxObjects)
+            if(count < maxObjects)
             {
-                PlaceObjectAtGPS(gpsCoord.x, gpsCoord.y, 0f/*gpsCoord.z*/);
+                PlaceObjectAtGPS(gpsCoord.x, gpsCoord.y, 319f/*gpsCoord.z*/);
             }
         }
     }
@@ -51,20 +51,10 @@ public class GPSObjectPlacer : MonoBehaviour
         GameObject newMarker = Instantiate(objToSpawn,new Vector3(latitude,altitude,longitude),Quaternion.identity, PollockArea);
         CesiumGlobeAnchor globeAnchor = newMarker.AddComponent<CesiumGlobeAnchor>();
 
-        // Convert GPS coordinates to Unity world coordinates
-        //Vector3 worldPosition = GPSEncoder.GPSToUCS(new Vector2(latitude,longitude));
-        
-        // Add or get the CesiumGlobeAnchor component
-        //CesiumGlobeAnchor globeAnchor = instance.GetComponent<CesiumGlobeAnchor>();
-        if (globeAnchor == null)
-        {
-            //globeAnchor = instance.AddComponent<CesiumGlobeAnchor>();
-        }
-
         // Set the geospatial coordinates
         globeAnchor.latitude = latitude;
         globeAnchor.longitude = longitude;
-        globeAnchor.height = 312;
+        globeAnchor.height = altitude;
 
         // Add the marker to the list and increment the counter
         markers.Add(newMarker);

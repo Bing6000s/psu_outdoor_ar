@@ -31,7 +31,7 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
     GameObject closestObstacleObj;
 
     // Define a movement threshold (adjust based on your game world scale)
-    float movementThreshold = 0.0001f;
+    //float movementThreshold = 0.0001f;
     private float initialDeviceHeading = 0f;
 
     IEnumerator WaitForMarkers()
@@ -248,7 +248,8 @@ public class NavArrowMan : MonoBehaviour, IDataPersistence
 
         // Adjust the target angle based on the initial device heading to ensure consistent rotation
         float targetAngle = Mathf.Atan2(direction2D.y, direction2D.x) * Mathf.Rad2Deg;
-        float adjustedAngle = targetAngle + angleBetween - (relativeHeading - initialDeviceHeading);
+        //float adjustedAngle = targetAngle + angleBetween - (relativeHeading - initialDeviceHeading);
+        float adjustedAngle = targetAngle + 90 - (relativeHeading - initialDeviceHeading);
 
         //combine rotation relative to where camera is facing
 

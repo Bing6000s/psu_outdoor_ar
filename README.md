@@ -147,14 +147,30 @@ updated Nav arrow to work and array of points. still need to test if objects pla
   - ARMv7 was disabled and ARM64 was enable
   - Google Console Account needed
 
-12/6/24
-3 hours of work
-Cesium set up
-Geospatial set up
-mini world made but only part is shown
-Archors on Marks
-12/7/24
-2 hours of work
-Issues with Marks appearing under the model of the area
+## 12/6/24
+### Changes to build settings
+- 3 hours of work
+- Cesium set up
+- Geospatial set up
+- mini world made but only part is shown
+- Archors on Marks
+## 12/7/24
+### Changes to build settings
+- 2 hours of work
+- Issues with Marks appearing under the model of the area
   - API level from 9.0 (API level 28) to 7.0 (API level 24)
   - ARMv7 and ARM64 was enable
+## 12/8/24
+### Changes to Georeference componts
+- 4 hours of work
+- created a GeoReference for pollock area on Penn State Campus
+- objects spawn on the map as childern of ObjectHolder in hierarchy
+- objects spawn at the correct height but the model of the pollock area isn't shown on run in Unity Editor.
+### Changes to Cesium 3D `Tileset`
+Solution found [here](https://community.cesium.com/t/3d-tile-set-not-loading-during-runtime/28936/2)
+- uncheck Enable Frustum Culling
+  - Solved the issue of model of pollock area not loading correct. 
+  - Corrected spawn location of object. 
+### Changes to Cesium 3D `NavArrowMan.cs`
+- Updated Rotation
+  - points at Nav Points regardless of start up facing direction, true north, and 3d model

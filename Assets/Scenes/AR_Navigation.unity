@@ -1311,7 +1311,7 @@ MonoBehaviour:
   _maximumSimultaneousTileLoads: 20
   _maximumCachedBytes: 536870912
   _loadingDescendantLimit: 20
-  _enableFrustumCulling: 1
+  _enableFrustumCulling: 0
   _enableFogCulling: 1
   _enforceCulledScreenSpaceError: 1
   _culledScreenSpaceError: 64
