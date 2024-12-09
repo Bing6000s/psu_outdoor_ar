@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using UnityEngine.XR.ARFoundation;
 using UnityEngine.SceneManagement;
 
 public class NavigationData
@@ -15,10 +14,8 @@ public class NavigationManager : MonoBehaviour
     public GameObject locationItemPrefab; // Drag a button prefab here
     public Transform locationsContainer; // Drag the parent transform of where the buttons should appear
     public GameObject navigationPanel;
-    public ARSession arSession;
     public Button mainMenuButton;
     public Button orButton;
-    public ArrowDirection arrowDirectionScript;
     private List<string> storedLocations = new List<string>();
 
     public void Start()
@@ -74,13 +71,11 @@ public class NavigationManager : MonoBehaviour
     public void ReturnToMainMenu()
     {
         navigationPanel.SetActive(true);
-        arSession.enabled = true;
         SceneManager.LoadScene("AR_Navigation");
     }
 
     public void ReturnToObjectRecognition()
     {
-        arSession.enabled = false; 
         SceneManager.LoadScene("AR_Navigation");
     }
 }
