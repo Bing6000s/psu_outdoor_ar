@@ -9,6 +9,7 @@ using System;
 
 public class NavigationBar : MonoBehaviour
 {
+    private int flag = 0;//denote false to switched from Navigation Manager
     public TMP_InputField inputfield;
     public Button searchButton;
     public GameObject directionTextPrefab;
@@ -18,13 +19,19 @@ public class NavigationBar : MonoBehaviour
     private string apiKey = "28wliaKNAA7BkAk9JsOalLkkR81nyYHK9vgSd7Fd7zaPnLL7zjDVJQQJ99AIACYeBjFL5h9IAAAgAZMPD6O2"; // Replace with your actual API key
     public void StartNav()
     {
-        string userInput = inputfield.text;
+        string userInput;
+
+        userInput = inputfield.text;
         StartCoroutine(TestDirectionsAPI(userInput));
         inputfield.text = "";
     }
 
     private void Start()
     {
+        if (NavigationData.flag == 1)
+        {
+            inputfield.text = NavigationData.Latitude.ToString("F6") + ", " + NavigationData.Longitude.ToString("F6");
+        }
         searchButton.onClick.AddListener(StartNav);
     }
 
@@ -34,6 +41,7 @@ public class NavigationBar : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             StartNav();
+            flag = 1;
         }
     }
     // Coroutine to handle the geolocation asynchronously and start the directions API request

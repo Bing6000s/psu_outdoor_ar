@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.SceneManagement;
 
+public class NavigationData
+{
+    public static float Latitude;
+    public static float Longitude;
+    public static int flag;
+}
 public class NavigationManager : MonoBehaviour
 {
     public GameObject locationItemPrefab; // Drag a button prefab here
@@ -58,10 +64,11 @@ public class NavigationManager : MonoBehaviour
         float lon = float.Parse(coordinates[3]);
         // Hide the navigation panel
         navigationPanel.SetActive(false);
-
+        NavigationData.Longitude = lon;
+        NavigationData.Latitude = lat;
+        NavigationData.flag = 1;
         //arSession.enabled = false;
         SceneManager.LoadScene("AR_Navigation");
-
     }
 
     public void ReturnToMainMenu()

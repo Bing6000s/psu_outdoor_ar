@@ -5,12 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9cad9e76-8607-43d9-bc23-425879a57639" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.psu_outdoor_ar/.idea/indexLayout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.psu_outdoor_ar/.idea/projectSettingsUpdater.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.psu_outdoor_ar/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/XR/Temp.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.psu_outdoor_ar/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.psu_outdoor_ar/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ML_Assets/NavigationManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ML_Assets/NavigationManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/NavigationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/NavigationController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/UIController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/UIController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/NavigationBar.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/NavigationBar.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/AR_Navigation.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/AR_Navigation.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-2021.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-2021.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,7 +36,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "bing",
+    "git-widget-placeholder": "main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -97,6 +101,7 @@
       <updated>1730006801710</updated>
       <workItem from="1730006803457" duration="21000" />
       <workItem from="1730307113046" duration="1307000" />
+      <workItem from="1733784103225" duration="1775000" />
     </task>
     <servers />
   </component>
