@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.XR.ARFoundation;
 using UnityEngine.SceneManagement;
 
 public class NavigationData
@@ -71,11 +72,9 @@ public class NavigationManager : MonoBehaviour
     public void ReturnToMainMenu()
     {
         navigationPanel.SetActive(true);
-        SceneManager.LoadScene("AR_Navigation");
     }
 
     public void ReturnToObjectRecognition()
     {
-        SceneManager.LoadScene("AR_Navigation");
     }
 }

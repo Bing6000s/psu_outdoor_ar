@@ -33,7 +33,7 @@ public class UIController : MonoBehaviour
 
     void MyImagesButtonPressed()
     {
-        SceneManager.LoadScene("MyImages");
+        SceneManager.LoadScene("SavedLocations");
     }
 
     void SettingsButtonPressed()
