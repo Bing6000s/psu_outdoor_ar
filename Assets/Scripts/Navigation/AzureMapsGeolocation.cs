@@ -28,7 +28,7 @@ public class AzureMapsGeocodingExample
         string lat = latitude.ToString();
         string lon = longitude.ToString();
         string limit = "1";
-        string radius = "3000";
+        string radius = "10000";
         // Construct base URL
         string url = $"https://atlas.microsoft.com/search/fuzzy/json?";
         using (HttpClient client = new HttpClient())

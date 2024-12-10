@@ -5992,7 +5992,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1eb118ad4b917a489dd012b7670d646, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gpsplacer: {fileID: 0}
+  gpsplacer: {fileID: 1221747120}
   inputfield: {fileID: 1526622389}
   searchButton: {fileID: 729427007}
   directionTextPrefab: {fileID: 2622122409772219938, guid: e4fef6bb8122f5f4db5b5c5708a213e3, type: 3}
