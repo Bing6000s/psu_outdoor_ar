@@ -10,6 +10,7 @@ using System;
 public class NavigationBar : MonoBehaviour
 {
     private int flag = 0;//denote false to switched from Navigation Manager
+    [SerializeField] private GPSObjectPlacer gpsplacer;
     public TMP_InputField inputfield;
     public Button searchButton;
     public GameObject directionTextPrefab;
@@ -139,6 +140,8 @@ public class NavigationBar : MonoBehaviour
                                     GameObject directionTextObject = Instantiate(directionTextPrefab, contentParent.transform);
                                     TMP_Text directionText = directionTextObject.GetComponent<TMP_Text>();
                                     directionText.text = $"{point.Latitude}, {point.Longitude}";
+                                    //places points
+                                    gpsplacer.PlaceObjectAtGPS((float)point.Latitude, (float)point.Longitude, 0f);
                                 }
                             }
 
