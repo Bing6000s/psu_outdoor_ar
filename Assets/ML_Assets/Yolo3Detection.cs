@@ -32,7 +32,7 @@ public class Yolo3Detection : MonoBehaviour
 
     [Header("Results Config")]
     public bool enableWhitelist = true;
-    public List<string> whitelist = new List<string>{"apple", "banana"};
+    public List<string> whitelist = new List<string> { "apple", "banana" };
     public float MINIMUM_CONFIDENCE = 0.25f; // Minimum detection confidence to track a detection
 
     // public const int ROW_COUNT_L = 13;
@@ -40,8 +40,8 @@ public class Yolo3Detection : MonoBehaviour
     // public const int ROW_COUNT_M = 26;
     // public const int COL_COUNT_M = 26;
 
-    public Dictionary<string, int> params_l = new Dictionary<string, int>(){{"ROW_COUNT", 13}, {"COL_COUNT", 13}, {"CELL_WIDTH", 32}, {"CELL_HEIGHT", 32}};
-    public Dictionary<string, int> params_m = new Dictionary<string, int>(){{"ROW_COUNT", 26}, {"COL_COUNT", 26}, {"CELL_WIDTH", 16}, {"CELL_HEIGHT", 16}};
+    public Dictionary<string, int> params_l = new Dictionary<string, int>() { { "ROW_COUNT", 13 }, { "COL_COUNT", 13 }, { "CELL_WIDTH", 32 }, { "CELL_HEIGHT", 32 } };
+    public Dictionary<string, int> params_m = new Dictionary<string, int>() { { "ROW_COUNT", 26 }, { "COL_COUNT", 26 }, { "CELL_WIDTH", 16 }, { "CELL_HEIGHT", 16 } };
     public const int BOXES_PER_CELL = 3; // Number of boxes detected in each YOLO cell
     public const int BOX_INFO_FEATURE_COUNT = 5; // Feature count for each box
 
@@ -70,16 +70,19 @@ public class Yolo3Detection : MonoBehaviour
         10F, 14F,  23F, 27F,  37F, 58F,  81F, 82F,  135F, 169F,  344F, 319F // yolov3-tiny
     };
 
-        
+
 
     // Function to reset running on suspended
-    public void ResetRunning(){
+    public void ResetRunning()
+    {
         this.running = false;
     }
 
     // Function to clear bounding boxes
-    public void ClearBoxes(){
-        foreach(GameObject boxObj in boxes){
+    public void ClearBoxes()
+    {
+        foreach (GameObject boxObj in boxes)
+        {
             Destroy(boxObj);
         }
         boxes.Clear();
@@ -108,26 +111,30 @@ public class Yolo3Detection : MonoBehaviour
     }
 
     // Function to update run counter GUI text with new count
-    void UpdateRunGUI(int runs){
+    void UpdateRunGUI(int runs)
+    {
         runCounterText.text = "" + runs;
     }
 
     // Update is run by Unity at each time step
-    public void Update(){
+    public void Update()
+    {
 
         // Continuously run
-        if(!this.running){
+        if (!this.running)
+        {
             this.runCounter += 1;
             UpdateRunGUI(this.runCounter);
 
             this.running = true;
             BeginInference();
         }
-        
+
     }
 
     // Function to begin inference process with pre-processing on WCT
-    void BeginInference(){
+    void BeginInference()
+    {
         // Grab WCT
         WebCamTexture thisWCT = getWebcameTextureRaw();
 
@@ -139,7 +146,8 @@ public class Yolo3Detection : MonoBehaviour
     }
 
     // Function to just return WebCamTexture
-    WebCamTexture getWebcameTextureRaw(){
+    WebCamTexture getWebcameTextureRaw()
+    {
         return outputImage.material.mainTexture as WebCamTexture;
     }
 
@@ -161,27 +169,28 @@ public class Yolo3Detection : MonoBehaviour
             // Get model output
             var output_l = worker.PeekOutput(OUTPUT_NAME_L);
             var output_m = worker.PeekOutput(OUTPUT_NAME_M);
-           
+
             // Parse outputs and concatenate
             var results_l = ParseOutputs(output_l, MINIMUM_CONFIDENCE, params_l);
             var results_m = ParseOutputs(output_m, MINIMUM_CONFIDENCE, params_m);
             var results = results_l.Concat(results_m).ToList();
 
-            // Filter down to relevant bounding boxes 
+            // Filter down to relevant bounding boxes
             var boxes = FilterBoundingBoxes(results, 5, MINIMUM_CONFIDENCE);
 
             var filteredResults = from box in boxes
-                                    where whitelist.Contains((box.Label).ToString())
-                                    select box;
+                                  where whitelist.Contains((box.Label).ToString())
+                                  select box;
             // Clear UI
             ClearBoxes();
 
             if (!enableWhitelist)
                 filteredResults = boxes;
-            
+
             // Render each bounding box and console log results
-            foreach(BoundingBox box in filteredResults){
-                RenderBoundingBox(box.Dimensions.X,box.Dimensions.Y,box.Dimensions.Width,box.Dimensions.Height, box.Label);
+            foreach (BoundingBox box in filteredResults)
+            {
+                RenderBoundingBox(box.Dimensions.X, box.Dimensions.Y, box.Dimensions.Width, box.Dimensions.Height, box.Label);
                 Debug.Log("aaaaa" + box.ToString());
 
                 // Notify UI of label
@@ -194,11 +203,12 @@ public class Yolo3Detection : MonoBehaviour
     }
 
     // Function to render a bounding box
-    void RenderBoundingBox(float x, float y, float width, float height, string label){
+    void RenderBoundingBox(float x, float y, float width, float height, string label)
+    {
         // Instantiate unity gameobject based on prefab
         GameObject newBox = Instantiate(boundingBoxPrefab, canvas);
         boxes.Add(newBox);
-        
+
         // Set label
         Text thisText = newBox.GetComponentsInChildren<Text>()[0];
         thisText.text = label;
@@ -209,19 +219,21 @@ public class Yolo3Detection : MonoBehaviour
         // Get webcam size
         float wct_width = outputCamera.rect.width;
         float wct_height = outputCamera.rect.height;
-        
+
         // Save larger image size to blowup to
         float offset = 0;
         float largerSq = 0;
         bool offsetOnWidth = false;
 
         // Handle width/height being cropped
-        if(wct_height > wct_width){
+        if (wct_height > wct_width)
+        {
             offset = (wct_height - wct_width) / 2F;
             largerSq = wct_width;
             offsetOnWidth = false;
         }
-        else{
+        else
+        {
             offset = (wct_width - wct_height) / 2F;
             largerSq = wct_height;
             offsetOnWidth = true;
@@ -230,13 +242,15 @@ public class Yolo3Detection : MonoBehaviour
         // Compute new x,y
         float newx = x / outputSize;
         newx = newx * largerSq;
-        if(offsetOnWidth){
+        if (offsetOnWidth)
+        {
             newx = newx + offset;
         }
 
         float newy = y / outputSize;
         newy = -(newy * largerSq);
-        if(!offsetOnWidth){
+        if (!offsetOnWidth)
+        {
             newy = newy - offset;
         }
 
@@ -399,7 +413,7 @@ public class Yolo3Detection : MonoBehaviour
             .First();
     }
 
-    // Function to join intersecting boxes 
+    // Function to join intersecting boxes
     private float IntersectionOverUnion(Rect boundingBoxA, Rect boundingBoxB)
     {
         var areaA = boundingBoxA.width * boundingBoxA.height;
@@ -471,5 +485,41 @@ public class Yolo3Detection : MonoBehaviour
             }
         }
         return results;
+    }
+    public void ReleaseResources()
+    {
+        // Release the Barracuda worker
+        if (worker != null)
+        {
+            worker.Dispose();
+            worker = null;
+        }
+
+        // Clear and destroy all bounding box GameObjects
+        if (boxes != null)
+        {
+            foreach (GameObject box in boxes)
+            {
+                if (box != null)
+                {
+                    Destroy(box);
+                }
+            }
+            boxes.Clear();
+        }
+
+        // Optional: Clear other references
+        labels = null;
+        thisPreprocessor = null;
+
+        // Optionally unload unused assets to free memory
+        Resources.UnloadUnusedAssets();
+        System.GC.Collect(); // Trigger garbage collection
+    }
+
+    // Ensure ReleaseResources is called when this object is destroyed
+    private void OnDestroy()
+    {
+        ReleaseResources();
     }
 }

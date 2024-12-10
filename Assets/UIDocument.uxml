@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="WideMainMenu" src="project://database/Assets/homebrew/UI/WideMainMenu.uxml?fileID=9197481963319205126&amp;guid=3ad66ebfafc24eb4aa14f2dff4c22742&amp;type=3#WideMainMenu" />
+    <ui:Instance template="WideMainMenu" name="WideMainMenu">
+        <AttributeOverrides element-name="my-images-button" text="Saved Location" />
+    </ui:Instance>
+</ui:UXML>
