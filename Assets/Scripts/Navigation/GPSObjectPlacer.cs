@@ -24,6 +24,7 @@ public class GPSObjectPlacer : MonoBehaviour
 
     void Start()
     {
+        // Used to place objects at a choosen point or on user
         gps = GPS.Instance;
         //Vector3 temp = GPSLocationToWorld(gps.latitude,gps.longitude,0f/*gps.altitude*/);
         inputVector = new Vector2(gps.latitude,gps.longitude);
