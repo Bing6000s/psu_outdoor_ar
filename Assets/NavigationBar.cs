@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 using UnityEngine.UI;
 using System;
 
+//call Azure Fuzzy Search api to search the best result from the search bar text, 
+//then parse to Azure Route and extract location points Additional info included. 
+
 public class NavigationBar : MonoBehaviour
 {
-    private int flag = 0;//denote false to switched from Navigation Manager
+    private int flag = 0;//If 0, our navigation has not started, and would need to start the navigation again.
     [SerializeField] private GPSObjectPlacer gpsplacer;
     public TMP_InputField inputfield;
     public Button searchButton;
@@ -17,7 +20,7 @@ public class NavigationBar : MonoBehaviour
     public GameObject distanceText;
     public GameObject contentParent;
     private string baseUrl = "https://atlas.microsoft.com/route/directions/json?api-version=1.0";
-    private string apiKey = "28wliaKNAA7BkAk9JsOalLkkR81nyYHK9vgSd7Fd7zaPnLL7zjDVJQQJ99AIACYeBjFL5h9IAAAgAZMPD6O2"; // Replace with your actual API key
+    private string apiKey = "28wliaKNAA7BkAk9JsOalLkkR81nyYHK9vgSd7Fd7zaPnLL7zjDVJQQJ99AIACYeBjFL5h9IAAAgAZMPD6O2";
     public void StartNav()
     {
         string userInput;
@@ -87,7 +90,7 @@ public class NavigationBar : MonoBehaviour
         }
         // Construct the full URL for the request
         string url = $"{baseUrl}&query={StartingLocation}:{DestinationLocation}&subscription-key={apiKey}&travelMode=pedestrian";
-        Debug.Log("Search bar: Request URL: " + url); // Log the URL to verify
+        Debug.Log("Search bar: Request URL: " + url); // Log the URL for debugging purposes
 
         // Make the API request
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
@@ -189,7 +192,6 @@ public class NavigationBar : MonoBehaviour
         }
     }
 
-    // Direction response classes (unchanged)
     public class DirectionsResponse
     {
         public Route[] Routes { get; set; }
